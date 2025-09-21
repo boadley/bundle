@@ -1,0 +1,11 @@
+{
+  "paymentType": "bank_transfer",
+  "details": {
+    "accountNumber": "0123456789",
+    "bankCode": "044",
+    "amount": 1000.50,
+    "accountName": "Splashy Bundle",
+    "reason": "Hackathon Test Payment"
+  },
+  "transactionId": "0.0.6871104@1758294746.743881069"
+}
