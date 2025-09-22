@@ -1,10 +1,183 @@
 # Installation
 
-# React Native
+AppKit provides seamless integration with multiple blockchain ecosystems. . It supports [Wagmi](https://wagmi.sh/) and [Ethers v6](https://docs.ethers.org/v6/) on Ethereum,
+[@solana/web3.js](https://solana-labs.github.io/solana-web3.js/) on Solana, as well as Bitcoin and other networks. AppKit Core with Universal Provider library, enable compatibility across any blockchain protocol.
 
-## Introduction
+Choose one of these to get started.
 
-AppKit has support for [Wagmi](https://wagmi.sh) and [Ethers](https://docs.ethers.org/v6/). Choose one of these Ethereum libraries to get started.
+## Installation
+
+**If you prefer referring to a video tutorial for this, please [click here](#video-tutorial).**
+
+### Set up Reown AppKit using AI
+
+If you're using Cursor IDE (or another AI based IDE) to build a project with Reown AppKit, Reown provides a `.mdc` file that enhances your development experience. The `reown-appkit.mdc` [file here](https://github.com/reown-com/reown-docs/blob/main/reown-appkit.mdc) contains Cursor-specific rules and type hints for Reown AppKit.
+
+To use it in your project:
+
+1. Copy the `reown-appkit.mdc` file from this repository
+2. Create a `.cursor/rules` folder in your project's root directory (if it doesn't exist)
+3. Place the `.mdc` file in your project's `.cursor/rules` folder
+
+For more info, refer to [Cursor's documentation](https://docs.cursor.com/context/rules#project-rules).
+
+### AppKit CLI
+
+Reown offers a dedicated CLI to set up a minimal version of AppKit in the easiest and quickest way possible.
+
+To do this, please run the command below.
+
+```bash
+npx @reown/appkit-cli
+```
+
+After running the command, you will be prompted to confirm the installation of the CLI. Upon your confirmation, the CLI will request the following details:
+
+1. **Project Name**: Enter the name for your project.
+2. **Framework**: Select your preferred framework or library. Currently, you have three options: React, Next.js, and Vue.
+3. **Network-Specific libraries**: Choose whether you want to install Wagmi, Ethers, Solana, or Multichain (EVM + Solana).
+
+After providing the project name and selecting your preferences, the CLI will install a minimal example of AppKit with your preferred blockchain library. The example will be pre-configured with a `projectId` that will only work on `localhost`.
+
+To fully configure your project, please obtain a `projectId` from the Reown Dashboard and update your project accordingly.
+
+**Refer to [this section](#cloud-configuration) for more information.**
+
+### Custom Installation
+
+<Warning>
+  If you are setting up your React app, please **do not use** `npx
+    create-react-app`, as it has been deprecated. Using it may cause dependency
+  issues. Instead, please use
+  [Vite](https://vitejs.dev/guide/#scaffolding-your-first-vite-project) to
+  create your React app. You can set it up by running `npm create vite@latest`.
+</Warning>
+
+<Tabs>
+  <Tab title="Wagmi">
+    <CodeGroup>
+      ```bash npm
+      npm install @reown/appkit @reown/appkit-adapter-wagmi wagmi viem @tanstack/react-query
+      ```
+
+      ```bash Yarn
+      yarn add @reown/appkit @reown/appkit-adapter-wagmi wagmi viem @tanstack/react-query
+      ```
+
+      ```bash Bun
+      bun add @reown/appkit @reown/appkit-adapter-wagmi wagmi viem @tanstack/react-query
+      ```
+
+      ```bash pnpm
+      pnpm add @reown/appkit @reown/appkit-adapter-wagmi wagmi viem @tanstack/react-query
+      ```
+    </CodeGroup>
+  </Tab>
+
+  <Tab title="Ethers v5">
+    <CodeGroup>
+      ```bash npm
+      npm install @reown/appkit @reown/appkit-adapter-ethers5 ethers@5.7.2
+      ```
+
+      ```bash Yarn
+      yarn add @reown/appkit @reown/appkit-adapter-ethers5 ethers@5.7.2
+      ```
+
+      ```bash Bun
+      bun add @reown/appkit @reown/appkit-adapter-ethers5 ethers@5.7.2
+      ```
+
+      ```bash pnpm
+      pnpm add @reown/appkit @reown/appkit-adapter-ethers5 ethers@5.7.2
+      ```
+    </CodeGroup>
+  </Tab>
+
+  <Tab title="Ethers">
+    <CodeGroup>
+      ```bash npm
+      npm install @reown/appkit @reown/appkit-adapter-ethers ethers
+      ```
+
+      ```bash Yarn
+      yarn add @reown/appkit @reown/appkit-adapter-ethers ethers
+      ```
+
+      ```bash Bun
+      bun add @reown/appkit @reown/appkit-adapter-ethers ethers
+      ```
+
+      ```bash pnpm
+      pnpm add @reown/appkit @reown/appkit-adapter-ethers ethers
+      ```
+    </CodeGroup>
+  </Tab>
+
+  <Tab title="Solana">
+    <CodeGroup>
+      ```bash npm
+      npm install @reown/appkit @reown/appkit-adapter-solana
+      ```
+
+      ```bash Yarn
+      yarn add @reown/appkit @reown/appkit-adapter-solana
+      ```
+
+      ```bash Bun
+      bun add @reown/appkit @reown/appkit-adapter-solana
+      ```
+
+      ```bash pnpm
+      pnpm add @reown/appkit @reown/appkit-adapter-solana
+      ```
+    </CodeGroup>
+  </Tab>
+
+  <Tab title="Bitcoin">
+    <CodeGroup>
+      ```bash npm
+      npm install @reown/appkit @reown/appkit-adapter-bitcoin
+      ```
+
+      ```bash Yarn
+      yarn add @reown/appkit @reown/appkit-adapter-bitcoin
+      ```
+
+      ```bash Bun
+      bun add @reown/appkit @reown/appkit-adapter-bitcoin
+      ```
+
+      ```bash pnpm
+      pnpm add @reown/appkit @reown/appkit-adapter-bitcoin
+      ```
+    </CodeGroup>
+  </Tab>
+
+  <Tab title="Others networks (AppKit Core)">
+    <CodeGroup>
+      ```bash npm
+      npm install @reown/appkit @reown/appkit-universal-connector @reown/appkit-common ethers
+      ```
+
+      ```bash Yarn
+      yarn add @reown/appkit @reown/appkit-universal-connector @reown/appkit-common ethers
+      ```
+
+      ```bash Bun
+      bun add @reown/appkit @reown/appkit-universal-connector @reown/appkit-common ethers
+      ```
+
+      ```bash pnpm
+      pnpm add @reown/appkit @reown/appkit-universal-connector @reown/appkit-common ethers
+      ```
+    </CodeGroup>
+  </Tab>
+</Tabs>
+
+## Cloud Configuration
+
+Create a new project on Reown Dashboard at [https://dashboard.reown.com](https://dashboard.reown.com) and obtain a new project ID.
 
 <Info>
   **Don't have a project ID?**
@@ -14,1024 +187,804 @@ AppKit has support for [Wagmi](https://wagmi.sh) and [Ethers](https://docs.ether
   <Card title="Get started" href="https://dashboard.reown.com/?utm_source=cloud_banner&utm_medium=docs&utm_campaign=backlinks" />
 </Info>
 
-## Installation
-
-<Tabs>
-  <Tab title="React Native CLI">
-    <Tabs>
-      <Tab title="Wagmi">
-        ```
-        yarn add @reown/appkit-wagmi-react-native wagmi viem @tanstack/react-query
-        ```
-
-        Additionally add these extra packages to help with async storage, polyfills, and SVG's.
-
-        ```
-        yarn add @react-native-async-storage/async-storage react-native-get-random-values react-native-svg react-native-modal@14.0.0-rc.1 @react-native-community/netinfo @walletconnect/react-native-compat
-        ```
-
-        On iOS, use CocoaPods to add the native modules to your project:
-
-        ```
-        npx pod-install
-        ```
-      </Tab>
-
-      <Tab title="Ethers">
-        ```
-        yarn add @reown/appkit-ethers-react-native ethers
-        ```
-
-        Additionally add these extra packages to help with async storage, polyfills, and SVG's.
-
-        ```
-        yarn add @react-native-async-storage/async-storage react-native-get-random-values react-native-svg react-native-modal@14.0.0-rc.1 @react-native-community/netinfo @walletconnect/react-native-compat
-        ```
-
-        On iOS, use CocoaPods to add the native modules to your project:
-
-        ```
-        npx pod-install
-        ```
-      </Tab>
-
-      <Tab title="Ethers v5">
-        ```
-        yarn add @reown/appkit-ethers5-react-native ethers@5.7.2
-        ```
-
-        Additionally add these extra packages to help with async storage, polyfills, and SVG's.
-
-        ```
-        yarn add @ethersproject/shims@5.7.0 @react-native-async-storage/async-storage react-native-get-random-values react-native-svg react-native-modal@14.0.0-rc.1 @react-native-community/netinfo @walletconnect/react-native-compat
-        ```
-
-        On iOS, use CocoaPods to add the native modules to your project:
-
-        ```
-        npx pod-install
-        ```
-      </Tab>
-    </Tabs>
-  </Tab>
-
-  <Tab title="Expo">
-    <Tabs>
-      <Tab title="Wagmi">
-        ```
-        npx expo install @reown/appkit-wagmi-react-native wagmi viem @tanstack/react-query
-        ```
-
-        Additionally add these extra packages to help with async storage, polyfills, and SVG's.
-
-        ```
-        npx expo install @react-native-async-storage/async-storage react-native-get-random-values react-native-svg react-native-modal@14.0.0-rc.1 @react-native-community/netinfo @walletconnect/react-native-compat expo-application
-        ```
-
-        ## Create babel.config.js
-
-        For Expo SDK 53 and later, you need to create a `babel.config.js` file in your project root to properly support the valtio library:
-
-        ```js
-        module.exports = function (api) {
-          api.cache(true);
-          return {
-            presets: [["babel-preset-expo", { unstable_transformImportMeta: true }]],
-          };
-        };
-        ```
-
-        This configuration enables the `unstable_transformImportMeta` option which is required for valtio to work correctly with Expo 53+.
-
-        <details>
-          <summary>Additional setup for Expo SDK 48 only</summary>
-
-          <div>
-            If you are using Expo SDK 48, you also need to polyfill `crypto` with expo-crypto library.
-
-            1. Add `expo-crypto`
-
-            ```
-            npx expo install expo-crypto
-            ```
-
-            2. Create a file named `crypto-polyfill.js`
-
-            ```js
-            // src/crypto-polyfill.js
-
-            // Apply only with Expo SDK 48
-            import { getRandomValues as expoCryptoGetRandomValues } from "expo-crypto";
-
-            class Crypto {
-              getRandomValues = expoCryptoGetRandomValues;
-            }
-
-            // eslint-disable-next-line no-undef
-            const webCrypto = typeof crypto !== "undefined" ? crypto : new Crypto();
-
-            (() => {
-              if (typeof crypto === "undefined") {
-                Object.defineProperty(window, "crypto", {
-                  configurable: true,
-                  enumerable: true,
-                  get: () => webCrypto,
-                });
-              }
-            })();
-            ```
-
-            3. Import `crypto-polyfill.js` in your App root file
-
-            ```js
-            // src/App.js
-
-            import './crypto-polyfill.js'
-            import '@walletconnect/react-native-compat';
-            ...
-            import { createAppKit } from '@reown/appkit-...'
-            ```
-          </div>
-        </details>
-      </Tab>
-
-      <Tab title="Ethers">
-        ```
-        npx expo install @reown/appkit-ethers-react-native ethers
-        ```
-
-        Additionally add these extra packages to help with async storage, polyfills, and SVG's.
-
-        ```
-        npx expo install @react-native-async-storage/async-storage react-native-get-random-values react-native-svg react-native-modal@14.0.0-rc.1 @react-native-community/netinfo @walletconnect/react-native-compat expo-application
-        ```
-
-        ## Create babel.config.js
-
-        For Expo SDK 53 and later, you need to create a `babel.config.js` file in your project root to properly support the valtio library:
-
-        ```js
-        module.exports = function (api) {
-          api.cache(true);
-          return {
-            presets: [["babel-preset-expo", { unstable_transformImportMeta: true }]],
-          };
-        };
-        ```
-
-        This configuration enables the `unstable_transformImportMeta` option which is required for valtio to work correctly with Expo 53+.
-
-        <details>
-          <summary>Additional setup for Expo SDK 48 only</summary>
-
-          <div>
-            If you are using Expo SDK 48, you also need to polyfill `crypto` with expo-crypto library.
-
-            1. Add `expo-crypto`
-
-            ```
-            npx expo install expo-crypto
-            ```
-
-            2. Create a file named `crypto-polyfill.js`
-
-            ```js
-            // src/crypto-polyfill.js
-
-            // Apply only with Expo SDK 48
-            import { getRandomValues as expoCryptoGetRandomValues } from "expo-crypto";
-
-            class Crypto {
-              getRandomValues = expoCryptoGetRandomValues;
-            }
-
-            // eslint-disable-next-line no-undef
-            const webCrypto = typeof crypto !== "undefined" ? crypto : new Crypto();
-
-            (() => {
-              if (typeof crypto === "undefined") {
-                Object.defineProperty(window, "crypto", {
-                  configurable: true,
-                  enumerable: true,
-                  get: () => webCrypto,
-                });
-              }
-            })();
-            ```
-
-            3. Import `crypto-polyfill.js` in your App root file
-
-            ```js
-            // src/App.js
-
-            import './crypto-polyfill.js'
-            import '@walletconnect/react-native-compat';
-            ...
-            import { createAppKit } from '@reown/appkit-...'
-            ```
-          </div>
-        </details>
-      </Tab>
-
-      <Tab title="Ethers v5">
-        ```
-        npx expo install @reown/appkit-ethers5-react-native ethers@5.7.2
-        ```
-
-        Additionally add these extra packages to help with async storage, polyfills, and SVG's.
-
-        ```
-        npx expo install @ethersproject/shims@5.7.0 @react-native-async-storage/async-storage react-native-get-random-values react-native-svg react-native-modal@14.0.0-rc.1 @react-native-community/netinfo @walletconnect/react-native-compat expo-application
-        ```
-
-        ## Create babel.config.js
-
-        For Expo SDK 53 and later, you need to create a `babel.config.js` file in your project root to properly support the valtio library:
-
-        ```js
-        module.exports = function (api) {
-          api.cache(true);
-          return {
-            presets: [["babel-preset-expo", { unstable_transformImportMeta: true }]],
-          };
-        };
-        ```
-
-        This configuration enables the `unstable_transformImportMeta` option which is required for valtio to work correctly with Expo 53+.
-
-        <details>
-          <summary>Additional setup for Expo SDK 48 only</summary>
-
-          <div>
-            If you are using Expo SDK 48, you also need to polyfill `crypto` with expo-crypto library.
-
-            1. Add `expo-crypto`
-
-            ```
-            npx expo install expo-crypto
-            ```
-
-            2. Create a file named `crypto-polyfill.js`
-
-            ```js
-            // src/crypto-polyfill.js
-
-            // Apply only with Expo SDK 48
-            import { getRandomValues as expoCryptoGetRandomValues } from "expo-crypto";
-
-            class Crypto {
-              getRandomValues = expoCryptoGetRandomValues;
-            }
-
-            // eslint-disable-next-line no-undef
-            const webCrypto = typeof crypto !== "undefined" ? crypto : new Crypto();
-
-            (() => {
-              if (typeof crypto === "undefined") {
-                Object.defineProperty(window, "crypto", {
-                  configurable: true,
-                  enumerable: true,
-                  get: () => webCrypto,
-                });
-              }
-            })();
-            ```
-
-            3. Import `crypto-polyfill.js` in your App root file
-
-            ```js
-            // src/App.js
-
-            import './crypto-polyfill.js'
-            import '@walletconnect/react-native-compat';
-            ...
-            import { createAppKit } from '@reown/appkit-...'
-            ```
-          </div>
-        </details>
-      </Tab>
-    </Tabs>
-  </Tab>
-</Tabs>
-
 ## Implementation
 
 <Tabs>
   <Tab title="Wagmi">
-    Start by importing `createAppKit`, and wagmi packages, then create your configs as shown below.
-    Finally, pass your configuration to `createAppKit`.
+    <Card title="wagmi Example" icon="github" href="https://github.com/reown-com/appkit-web-examples/tree/main/react/react-wagmi">
+      Check the React wagmi example
+    </Card>
 
-    <Note>
-      Make sure you import `@walletconnect/react-native-compat` before `wagmi` to avoid any issues.
-    </Note>
+    For a quick integration, you can use the `createAppKit` function with a unified configuration. This automatically applies the predefined configurations for different adapters like Wagmi, Ethers, or Solana, so you no longer need to manually configure each one individually. Simply pass the common parameters such as `projectId`, `chains`, `metadata`, etc., and the function will handle the adapter-specific configurations under the hood.
 
-    <Note>
-      `createAppKit` must be called before rendering the `<AppKit />` component or any other AppKit UI components. Make sure to call `createAppKit` at the module level, outside of your React components.
-    </Note>
+    This includes WalletConnect, Coinbase and Injected connectors, and the [Blockchain API](../../../../cloud/blockchain-api) as a [transport](https://wagmi.sh/core/api/createConfig#transports)
+
+    On top of your app set up the following configuration, making sure that all functions are called **outside** any React component to avoid unwanted rerenders.
 
     ```tsx
-    import "@walletconnect/react-native-compat";
-    import { WagmiProvider } from "wagmi";
-    import { mainnet, polygon, arbitrum } from "@wagmi/core/chains";
-    import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-    import {
-      createAppKit,
-      defaultWagmiConfig,
-      AppKit,
-    } from "@reown/appkit-wagmi-react-native";
+    import { createAppKit } from '@reown/appkit/react'
+
+    import { WagmiProvider } from 'wagmi'
+    import { arbitrum, mainnet } from '@reown/appkit/networks'
+    import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+    import { WagmiAdapter } from '@reown/appkit-adapter-wagmi'
 
     // 0. Setup queryClient
-    const queryClient = new QueryClient();
+    const queryClient = new QueryClient()
 
-    // 1. Get projectId at https://dashboard.reown.com
+    // 1. Get projectId from https://dashboard.reown.com
+    const projectId = 'YOUR_PROJECT_ID'
+
+    // 2. Create a metadata object - optional
+    const metadata = {
+      name: 'AppKit',
+      description: 'AppKit Example',
+      url: 'https://example.com', // origin must match your domain & subdomain
+      icons: ['https://avatars.githubusercontent.com/u/179229932']
+    }
+
+    // 3. Set the networks
+    const networks = [mainnet, arbitrum]
+
+    // 4. Create Wagmi Adapter
+    const wagmiAdapter = new WagmiAdapter({
+      networks,
+      projectId,
+      ssr: true
+    })
+
+    // 5. Create modal
+    createAppKit({
+      adapters: [wagmiAdapter],
+      networks,
+      projectId,
+      metadata,
+      features: {
+        analytics: true // Optional - defaults to your Cloud configuration
+      }
+    })
+
+    export function AppKitProvider({ children }) {
+      return (
+        <WagmiProvider config={wagmiAdapter.wagmiConfig}>
+          <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+        </WagmiProvider>
+      )
+    }
+    ```
+
+    ## Importing networks
+
+    Reown AppKit use [Viem](https://viem.sh/) networks under the hood, which provide a wide variety of networks for EVM chains. You can find all the networks supported by Viem within the `@reown/appkit/networks` path.
+
+    ```js {2}
+    import { createAppKit } from '@reown/appkit'
+    import { mainnet, arbitrum, base, scroll, polygon } from '@reown/appkit/networks'
+    ```
+
+    <Note>
+      Looking to add a custom network? Check out the [custom networks](../../core/custom-networks) section.
+    </Note>
+  </Tab>
+
+  <Tab title="Ethers v5">
+    <Card title="Ethers v5 Example" icon="github" href="https://github.com/reown-com/appkit-web-examples/tree/main/react/react-ethers5">
+      Check the React ethers v5 example
+    </Card>
+
+    On top of your app set up the following configuration, making sure that all functions are called outside any React component to avoid unwanted rerenders.
+
+    ```tsx
+    import { createAppKit } from "@reown/appkit/react";
+    import { Ethers5Adapter } from "@reown/appkit-adapter-ethers5";
+    import { mainnet, arbitrum } from "@reown/appkit/networks";
+
+    // 1. Get projectId
     const projectId = "YOUR_PROJECT_ID";
 
-    // 2. Create config
+    // 2. Create a metadata object - optional
     const metadata = {
-      name: "AppKit RN",
-      description: "AppKit RN Example",
-      url: "https://reown.com/appkit",
-      icons: ["https://avatars.githubusercontent.com/u/179229932"],
-      redirect: {
-        native: "YOUR_APP_SCHEME://",
-        universal: "YOUR_APP_UNIVERSAL_LINK.com",
-      },
+      name: "My Website",
+      description: "My Website description",
+      url: "https://mywebsite.com", // origin must match your domain & subdomain
+      icons: ["https://avatars.mywebsite.com/"],
     };
 
-    const chains = [mainnet, polygon, arbitrum] as const;
+    // 3. Create the AppKit instance
+    createAppKit({
+      adapters: [new Ethers5Adapter()],
+      metadata: metadata,
+      networks: [mainnet, arbitrum],
+      projectId,
+      features: {
+        analytics: true, // Optional - defaults to your Cloud configuration
+      },
+    });
 
-    const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata });
+    export default function App() {
+      return <YourApp />; //make sure you have configured the <appkit-button> inside
+    }
+    ```
+
+    <Warning>
+      Make sure that the `url` from the `metadata` matches your domain and subdomain. This will later be used by the [Verify API](../../../cloud/verify) to tell wallets if your application has been verified or not.
+    </Warning>
+  </Tab>
+
+  <Tab title="Ethers">
+    <Card title="Ethers Example" icon="github" href="https://github.com/reown-com/appkit-web-examples/tree/main/react/react-ethers">
+      Check the React ethers example
+    </Card>
+
+    On top of your app set up the following configuration, making sure that all functions are called outside any React component to avoid unwanted rerenders.
+
+    ```tsx
+    import { createAppKit } from "@reown/appkit/react";
+    import { EthersAdapter } from "@reown/appkit-adapter-ethers";
+    import { arbitrum, mainnet } from "@reown/appkit/networks";
+
+    // 1. Get projectId
+    const projectId = "YOUR_PROJECT_ID";
+
+    // 2. Set the networks
+    const networks = [arbitrum, mainnet];
+
+    // 3. Create a metadata object - optional
+    const metadata = {
+      name: "My Website",
+      description: "My Website description",
+      url: "https://mywebsite.com", // origin must match your domain & subdomain
+      icons: ["https://avatars.mywebsite.com/"],
+    };
+
+    // 4. Create a AppKit instance
+    createAppKit({
+      adapters: [new EthersAdapter()],
+      networks,
+      metadata,
+      projectId,
+      features: {
+        analytics: true, // Optional - defaults to your Cloud configuration
+      },
+    });
+
+    export default function App() {
+      return <YourApp />; // Configure the <appkit-button> or a similar button inside
+    }
+    ```
+
+    <Warning>
+      Make sure that the `url` from the `metadata` matches your domain and subdomain. This will later be used by the [Verify API](../../../../cloud/verify) to tell wallets if your application has been verified or not.
+    </Warning>
+  </Tab>
+
+  <Tab title="Solana">
+    <Card title="Solana Example" icon="github" href="https://github.com/reown-com/appkit-web-examples/tree/main/react/react-solana">
+      Check the React Solana example
+    </Card>
+
+    AppKit Solana provides a set of React components and hooks to easily connect Solana wallets with your application.
+
+    On top of your app set up the following configuration, making sure that all functions are called outside any React component to avoid unwanted rerenders.
+
+    ```tsx
+    // App.tsx
+    import { createAppKit } from "@reown/appkit/react";
+    import { SolanaAdapter } from "@reown/appkit-adapter-solana/react";
+    import { solana, solanaTestnet, solanaDevnet } from "@reown/appkit/networks";
+
+    // 0. Set up Solana Adapter
+    const solanaWeb3JsAdapter = new SolanaAdapter();
+
+    // 1. Get projectId from https://dashboard.reown.com
+    const projectId = "YOUR_PROJECT_ID";
+
+    // 2. Create a metadata object - optional
+    const metadata = {
+      name: "AppKit",
+      description: "AppKit Solana Example",
+      url: "https://example.com", // origin must match your domain & subdomain
+      icons: ["https://avatars.githubusercontent.com/u/179229932"],
+    };
 
     // 3. Create modal
     createAppKit({
+      adapters: [solanaWeb3JsAdapter],
+      networks: [solana, solanaTestnet, solanaDevnet],
+      metadata: metadata,
       projectId,
-      metadata,
-      wagmiConfig,
-      defaultChain: mainnet, // Optional
-      enableAnalytics: true, // Optional - defaults to your Cloud configuration
+      features: {
+        analytics: true, // Optional - defaults to your Cloud configuration
+      },
     });
 
     export default function App() {
-      return (
-        <WagmiProvider config={wagmiConfig}>
-          <QueryClientProvider client={queryClient}>
-            // Rest of your app...
-            <AppKit />
-          </QueryClientProvider>
-        </WagmiProvider>
-      );
+      return <YourApp />;
     }
     ```
-
-    #### Trigger the modal
-
-    To open AppKit modal you can use our **default** button component or build your own logic using our hooks.
-
-    <Tabs>
-      <Tab title="Components">
-        You can use our components to open the modal
-
-        ```tsx
-        import { AppKitButton } from "@reown/appkit-wagmi-react-native";
-
-        export default function ConnectView() {
-          return (
-            <>
-              ...rest of your view
-              <AppKitButton />
-            </>
-          );
-        }
-        ```
-
-        Learn more about the AppKit components [here](../../core/components)
-      </Tab>
-
-      <Tab title="Hooks">
-        You can trigger the modal by calling the `open` function from `useAppKit` hook.
-
-        ```tsx
-        import { Pressable, Text } from "react-native";
-        import { useAppKit } from "@reown/appkit-wagmi-react-native";
-
-        export default function ConnectView() {
-          const { open } = useAppKit();
-
-          return (
-            <>
-              <Pressable onClick={() => open()}>
-                <Text>Open Connect Modal</Text>
-              </Pressable>
-            </>
-          );
-        }
-        ```
-
-        Learn more about the AppKit hooks [here](../../core/hooks)
-      </Tab>
-    </Tabs>
   </Tab>
 
-  <Tab title="Ethers">
-    Start by importing `createAppKit` and create your configs as shown below.
-    Finally, pass your configuration to `createAppKit`.
+  <Tab title="Bitcoin">
+    <Card title="Bitcoin Example" icon="github" href="https://github.com/reown-com/appkit-web-examples/tree/main/react/react-bitcoin">
+      Check the React Bitcoin example
+    </Card>
 
-    <Note>
-      Make sure you import `@walletconnect/react-native-compat` before using our package to avoid any issues.
-    </Note>
+    AppKit Bitcoin provides a set of React components and hooks to easily connect Bitcoin wallets with your application.
 
-    <Note>
-      `createAppKit` must be called before rendering the `<AppKit />` component or any other AppKit UI components. Make sure to call `createAppKit` at the module level, outside of your React components.
-    </Note>
+    On top of your app set up the following configuration, making sure that all functions are called outside any React component to avoid unwanted rerenders.
 
     ```tsx
-    import "@walletconnect/react-native-compat";
-
-    import {
-      createAppKit,
-      defaultConfig,
-      AppKit,
-    } from "@reown/appkit-ethers-react-native";
+    // App.tsx
+    import { createAppKit } from '@reown/appkit/react'
+    import { BitcoinAdapter } from '@reown/appkit-adapter-bitcoin'
+    import { bitcoin } from '@reown/appkit/networks'
 
     // 1. Get projectId from https://dashboard.reown.com
-    const projectId = "YOUR_PROJECT_ID";
+    const projectId = 'YOUR_PROJECT_ID'
 
-    // 2. Create config
+    // 2. Set the networks
+    const networks = [bitcoin]
+
+    // 3. Set up Bitcoin Adapter
+    const bitcoinAdapter = new BitcoinAdapter({
+      projectId
+    })
+
+    // 4. Create a metadata object - optional
     const metadata = {
-      name: "AppKit RN",
-      description: "AppKit RN Example",
-      url: "https://reown.com/appkit",
-      icons: ["https://avatars.githubusercontent.com/u/179229932"],
-      redirect: {
-        native: "YOUR_APP_SCHEME://",
-      },
-    };
+      name: 'AppKit',
+      description: 'AppKit Bitcoin Example',
+      url: 'https://example.com', // origin must match your domain & subdomain
+      icons: ['https://avatars.githubusercontent.com/u/179229932']
+    }
 
-    const config = defaultConfig({ metadata });
-
-    // 3. Define your chains
-    const mainnet = {
-      chainId: 1,
-      name: "Ethereum",
-      currency: "ETH",
-      explorerUrl: "https://etherscan.io",
-      rpcUrl: "https://cloudflare-eth.com",
-    };
-
-    const polygon = {
-      chainId: 137,
-      name: "Polygon",
-      currency: "MATIC",
-      explorerUrl: "https://polygonscan.com",
-      rpcUrl: "https://polygon-rpc.com",
-    };
-
-    const chains = [mainnet, polygon];
-
-    // 4. Create modal
+    // 5. Create modal
     createAppKit({
-      projectId,
+      adapters: [bitcoinAdapter],
+      networks,
       metadata,
-      chains,
-      config,
-      enableAnalytics: true, // Optional - defaults to your Cloud configuration
-    });
+      projectId,
+      features: {
+        analytics: true // Optional - defaults to your Dashboard configuration,
+        email: false,
+        socials: []
+      }
+    })
 
     export default function App() {
-      return (
-        <>
-          // Rest of your app...
-          <AppKit />
-        </>
-      );
+      return <YourApp />
     }
     ```
 
-    #### Trigger the modal
+    ## Bitcoin Provider Interface
 
-    To open AppKit modal you can use our **default** button component or build your own logic using our hooks.
-
-    <Tabs>
-      <Tab title="Components">
-        You can use our components to open the modal
-
-        ```tsx
-        import { AppKitButton } from "@reown/appkit-ethers-react-native";
-
-        export default function ConnectView() {
-          return (
-            <>
-              ...rest of your view
-              <AppKitButton />
-            </>
-          );
-        }
-        ```
-
-        Learn more about the AppKit components [here](../../core/components)
-      </Tab>
-
-      <Tab title="Hooks">
-        You can trigger the modal by calling the `open` function from `useAppKit` hook.
-
-        ```tsx
-        import { Pressable, Text } from "react-native";
-        import { useAppKit } from "@reown/appkit-ethers-react-native";
-
-        export default function ConnectView() {
-          const { open } = useAppKit();
-
-          return (
-            <>
-              <Pressable onClick={() => open()}>
-                <Text>Open Connect Modal</Text>
-              </Pressable>
-            </>
-          );
-        }
-        ```
-
-        Learn more about the AppKit hooks [here](../../core/hooks)
-      </Tab>
-    </Tabs>
-  </Tab>
-
-  <Tab title="Ethers v5">
-    Start by importing `createAppKit` and create your configs as shown below.
-    Finally, pass your configuration to `createAppKit`.
-
-    <Note>
-      Make sure you import `@walletconnect/react-native-compat` and `@ethersproject/shims` before using our package to avoid any issues.
-    </Note>
-
-    <Note>
-      `createAppKit` must be called before rendering the `<AppKit />` component or any other AppKit UI components. Make sure to call `createAppKit` at the module level, outside of your React components.
-    </Note>
-
-    ```tsx
-    import "@walletconnect/react-native-compat";
-    import "@ethersproject/shims";
-
-    import {
-      createAppKit,
-      defaultConfig,
-      AppKit,
-    } from "@reown/appkit-ethers5-react-native";
-
-    // 1. Get projectId from https://dashboard.reown.com
-    const projectId = "YOUR_PROJECT_ID";
-
-    // 2. Create config
-    const metadata = {
-      name: "AppKit RN",
-      description: "AppKit RN Example",
-      url: "https://reown.com/appkit",
-      icons: ["https://avatars.githubusercontent.com/u/179229932"],
-      redirect: {
-        native: "YOUR_APP_SCHEME://",
-      },
-    };
-
-    const config = defaultConfig({ metadata });
-
-    // 3. Define your chains
-    const mainnet = {
-      chainId: 1,
-      name: "Ethereum",
-      currency: "ETH",
-      explorerUrl: "https://etherscan.io",
-      rpcUrl: "https://cloudflare-eth.com",
-    };
-
-    const polygon = {
-      chainId: 137,
-      name: "Polygon",
-      currency: "MATIC",
-      explorerUrl: "https://polygonscan.com",
-      rpcUrl: "https://polygon-rpc.com",
-    };
-
-    const chains = [mainnet, polygon];
-
-    // 4. Create modal
-    createAppKit({
-      projectId,
-      metadata,
-      chains,
-      config,
-      enableAnalytics: true, // Optional - defaults to your Cloud configuration
-    });
-
-    export default function App() {
-      return (
-        <>
-          // Rest of your app...
-          <AppKit />
-        </>
-      );
+    ```ts
+    export interface BitcoinConnector extends ChainAdapterConnector, Provider {
+      getAccountAddresses(): Promise<BitcoinConnector.AccountAddress[]>;
+      signMessage(params: BitcoinConnector.SignMessageParams): Promise<string>;
+      sendTransfer(params: BitcoinConnector.SendTransferParams): Promise<string>;
+      signPSBT(
+        params: BitcoinConnector.SignPSBTParams
+      ): Promise<BitcoinConnector.SignPSBTResponse>;
     }
     ```
 
-    #### Trigger the modal
-
-    To open AppKit modal you can use our **default** button component or build your own logic using our hooks.
+    ### Parameters
 
     <Tabs>
-      <Tab title="Components">
-        You can use our components to open the modal
-
-        ```tsx
-        import { AppKitButton } from "@reown/appkit-ethers5-react-native";
-
-        export default function ConnectView() {
-          return (
-            <>
-              ...rest of your view
-              <AppKitButton />
-            </>
-          );
-        }
-        ```
-
-        Learn more about the AppKit components [here](../../core/components)
-      </Tab>
-
-      <Tab title="Hooks">
-        You can trigger the modal by calling the `open` function from `useAppKit` hook.
-
-        ```tsx
-        import { Pressable, Text } from "react-native";
-        import { useAppKit } from "@reown/appkit-ethers5-react-native";
-
-        export default function ConnectView() {
-          const { open } = useAppKit();
-
-          return (
-            <>
-              <Pressable onClick={() => open()}>
-                <Text>Open Connect Modal</Text>
-              </Pressable>
-            </>
-          );
-        }
-        ```
-
-        Learn more about the AppKit hooks [here](../../core/hooks)
-      </Tab>
-    </Tabs>
-  </Tab>
-</Tabs>
-
-## Getting Support 🙋
-
-Reown is committed to delivering the best developer experience.
-
-If you have any questions, feature requests, or bug reports, feel free to open an issue on [GitHub](https://github.com/reown-com/appkit-react-native)!
-
-## Enable Wallet Detection (Optional)
-
-<Info>
-  **This is an optional feature** that enhances the user experience by:
-
-  * Showing a green checkmark next to installed wallets
-  * Prioritizing installed wallets at the top of the list
-
-  **All 430+ wallets in the AppKit ecosystem work via WalletConnect protocol regardless of this configuration.** You only need to add the wallets your users most commonly have installed.
-</Info>
-
-To enable AppKit to detect wallets installed on the device, you can make specific changes to the native code of your project.
-
-<Tabs>
-  <Tab title="React Native CLI">
-    <Tabs>
-      <Tab title="iOS">
-        1. Open your `Info.plist` file.
-        2. Locate the `<key>LSApplicationQueriesSchemes</key>` section.
-        3. Add the desired wallet schemes as string entries within the `<array>`. These schemes represent the wallets you want to detect.
-        4. Refer to our [Info.plist example file](https://github.com/WalletConnect/react-native-examples/blob/main/dapps/ModalUProvider/ios/ModalUProvider/Info.plist) for a detailed illustration.
-
-        Example:
-
-        ```xml
-        <key>LSApplicationQueriesSchemes</key>
-        <array>
-          <string>metamask</string>
-          <string>trust</string>
-          <string>safe</string>
-          <string>rainbow</string>
-          <string>uniswap</string>
-          <!-- Add other wallet schemes names here -->
-        </array>
-        ```
-      </Tab>
-
-      <Tab title="Android">
-        1. Open your `AndroidManifest.xml` file.
-        2. Locate the `<queries>` section.
-        3. Add the desired wallet package names as `<package>` entries within the `<queries>`. These package names correspond to the wallets you want to detect.
-        4. Refer to our [AndroidManifest.xml example file](https://github.com/WalletConnect/react-native-examples/blob/main/dapps/ModalUProvider/android/app/src/main/AndroidManifest.xml) for detailed guidance.
-
-        Example:
-
-        ```xml
-        <queries>
-          <package android:name="io.metamask"/>
-          <package android:name="com.wallet.crypto.trustapp"/>
-          <package android:name="io.gnosis.safe"/>
-          <package android:name="me.rainbow"/>
-          <!-- Add other wallet package names here -->
-        </queries>
-        ```
-      </Tab>
-    </Tabs>
-  </Tab>
-
-  <Tab title="Expo">
-    <Tabs>
-      <Tab title="iOS">
-        To enable AppKit to detect wallets installed on the device in your Expo project for iOS, follow these steps:
-
-        1. Open your `app.json` (or `app.config.js`) file.
-        2. Locate the ios section within the configuration.
-        3. Add the `infoPlist` object if it doesn't exist, and within it, include the `LSApplicationQueriesSchemes` array. This array will contain the desired wallet schemes you want to detect.
-        4. Add the wallet schemes to the `LSApplicationQueriesSchemes` array.
-
-        Your configuration should look like this:
-
-        ```js {4-13}
-        {
-          "expo": {
-            "ios": {
-              "infoPlist": {
-                "LSApplicationQueriesSchemes": [
-                  "metamask",
-                  "trust",
-                  "safe",
-                  "rainbow",
-                  "uniswap"
-                  // Add other wallet schemes names here
-                ]
-              }
-            }
+      <Tab title="SignMessageParams">
+        ```ts
+          export type SignMessageParams = {
+            /**
+             * The message to be signed
+             */
+            message: string
+            /**
+             * The address to sign the message with
+             */
+            address: string
           }
-        }
         ```
       </Tab>
 
-      <Tab title="Android">
-        To enable AppKit to detect wallets installed on the device in your Expo project for Android, follow these steps:
+      <Tab title="SignMessageParams">
+        ```ts
+          export type SendTransferParams = {
+            /**
+             * The amount to be sent in satoshis
+             */
+            amount: string
+            /**
+             * The address to send the transfer to
+             */
+            recipient: string
+          }
+        ```
+      </Tab>
 
-        1. Open your `app.json` (or `app.config.js`) file.
-        2. Locate the plugins section within the configuration.
-        3. Add `queries.js` in the plugins array:
+      <Tab title="SignPSBTParams">
+        ```ts
+          export type SignPSBTParams = {
+            /**
+             * The PSBT to be signed, string base64 encoded
+             */
+            psbt: string
+            signInputs: {
+              /**
+               * The address whose private key to use for signing.
+               */
+              address: string
+              /**
+               * Specifies which input to sign
+               */
+              index: number
+              /**
+               * Specifies which part(s) of the transaction the signature commits to
+               */
+              sighashTypes: number[]
+            }[]
 
-        ```js {4}
-        {
-          "plugins": [
-            // other plugins,
-            "./queries.js"
-          ],
+            /**
+             * If `true`, the PSBT will be broadcasted after signing. Default is `false`.
+             */
+            broadcast?: boolean
+
         }
+
         ```
+      </Tab>
+    </Tabs>
 
-        4. Create the file `queries.js`:
+    ### Responses
 
-        ```js
-        // based on https://github.com/expo/config-plugins/issues/123#issuecomment-1746757954
-
-        const {
-          AndroidConfig,
-          withAndroidManifest,
-          createRunOncePlugin,
-        } = require("expo/config-plugins");
-
-        const queries = {
-          package: [
-            { $: { "android:name": "com.wallet.crypto.trustapp" } },
-            { $: { "android:name": "io.metamask" } },
-            { $: { "android:name": "me.rainbow" } },
-            { $: { "android:name": "io.zerion.android" } },
-            { $: { "android:name": "io.gnosis.safe" } },
-            { $: { "android:name": "com.uniswap.mobile" } },
-            // Add other wallet package names here
-          ],
-        };
-
-        /**
-         * @param {import('@expo/config-plugins').ExportedConfig} config
-         */
-        const withAndroidManifestService = (config) => {
-          return withAndroidManifest(config, (config) => {
-            config.modResults.manifest = {
-              ...config.modResults.manifest,
-              queries,
-            };
-
-            return config;
-          });
-        };
-
-        module.exports = createRunOncePlugin(
-          withAndroidManifestService,
-          "withAndroidManifestService",
-          "1.0.0"
-        );
+    <Tabs>
+      <Tab title="AccountAddress">
+        ```ts
+          export type AccountAddress = {
+            /**
+             * Public address belonging to the account.
+             */
+            address: string
+            /**
+             * Public key for the derivation path in hex, without 0x prefix
+             */
+            publicKey?: string
+            /**
+             * The derivation path of the address e.g. "m/84'/0'/0'/0/0"
+             */
+            path?: string
+            /**
+             * The purpose of the address
+             */
+            purpose: 'payment' | 'ordinal' | 'stx'
+          }
         ```
+      </Tab>
 
-        5. Add the wallet package names you want to be detected by your app.
+      <Tab title="SignPSBTResponse">
+        ```ts
+          export type SignPSBTResponse = {
+            /**
+             * The signed PSBT, string base64 encoded
+             */
+            psbt: string
+            /**
+             * The `string` transaction id of the broadcasted transaction or `undefined` if not broadcasted
+             */
+            txid?: string
+          }
+        ```
       </Tab>
     </Tabs>
   </Tab>
-</Tabs>
 
-## Enable Coinbase Wallet (Optional)
+  <Tab title="Others networks (AppKit Core)">
+    <Card title="AppKit Core Example" icon="github" href="https://github.com/reown-com/appkit-web-examples/tree/main/react/react-core-universal-connector">
+      Check the React AppKit Core example for Sui
+    </Card>
 
-<Info>
-  **Coinbase Wallet support is optional.** Unlike other wallets that use the WalletConnect protocol, Coinbase Wallet uses its own proprietary SDK. If you skip this setup, Coinbase Wallet simply won't appear in your wallet list, but all other wallets will work normally.
-</Info>
+    For a quick integration of Appkit Core you can use the `UniversalConnector` class. Which simplifies the integration of Appkit Core by providing a single interface for all the blockchain protocols.
 
-Follow these steps to install Coinbase SDK in your project along with our Coinbase package. Check <a href="https://mobilewalletprotocol.github.io/wallet-mobile-sdk/docs/client-sdk/rn-install">here</a> for more detailed information.
+    You can configure the Universal Connector with the networks you want to support.
+    For more information, please visit [RPC Reference](https://docs.reown.com/advanced/multichain/rpc-reference/cosmos-rpc) section from our docs.
 
-<Note>
-  **Expo Compatibility:** Coinbase SDK works with [Expo Prebuild](https://docs.expo.dev/workflow/prebuild/) but not with Expo Go. You'll need to use `expo prebuild` to generate native code before building your app.
-</Note>
+    We recommend creating a config file to establish a singleton instance for the Universal Connector:
 
-1. Enable Expo Modules in your project running:
+    ```tsx
+    import type { AppKitNetwork } from '@reown/appkit/networks'
+    import type { CustomCaipNetwork } from '@reown/appkit-common'
+    import { UniversalConnector } from '@reown/appkit-universal-connector'
 
-```
-npx install-expo-modules@latest
-```
+    // Get projectId from https://dashboard.reown.com
+    export const projectId = import.meta.env.VITE_PROJECT_ID || "b56e18d47c72ab683b10814fe9495694" // this is a public projectId only to use on localhost
 
-2. Install Coinbase SDK
-
-```
-yarn add @coinbase/wallet-mobile-sdk react-native-mmkv
-```
-
-3. Install our custom connector
-
-<Tabs>
-  <Tab title="Wagmi">
-    `yarn add @reown/appkit-coinbase-wagmi-react-native`
-  </Tab>
-
-  <Tab title="Ethers">
-    `yarn add @reown/appkit-coinbase-ethers-react-native`
-  </Tab>
-
-  <Tab title="Ethers v5">
-    `yarn add @reown/appkit-coinbase-ethers-react-native`
-  </Tab>
-</Tabs>
-
-4. Run pod-install
-
-```
-npx pod-install
-```
-
-5. Enable Deeplink handling in your project following <a href="https://reactnative.dev/docs/linking?syntax=ios#enabling-deep-links">React Native docs</a>
-
-6. Add Coinbase package in your AndroidManifest.xml and Info.Plist
-
-```xml
-// AndroidManifest.xml
-
-<queries>
-  <!-- other queries -->
-  <package android:name="org.toshi" />
-</queries>
-```
-
-```xml
-// Info.plist
-
-<key>LSApplicationQueriesSchemes</key>
-<array>
-  <!-- other schemes -->
-  <string>cbwallet</string>
-</array>
-```
-
-7. Add Coinbase response handler in your app. More info <a href="https://mobilewalletprotocol.github.io/wallet-mobile-sdk/docs/client-sdk/rn-setup#listening-for-responses">here</a>
-
-```tsx
-import { handleResponse } from "@coinbase/wallet-mobile-sdk";
-
-// Your app's deeplink handling code
-useEffect(() => {
-  const sub = Linking.addEventListener("url", ({ url }) => {
-    const handledBySdk = handleResponse(new URL(url));
-    if (!handledBySdk) {
-      // Handle other deeplinks
+    if (!projectId) {
+      throw new Error('Project ID is not defined')
     }
-  });
 
-  return () => sub.remove();
-}, []);
-```
+    // you can configure your own network
+    const suiMainnet: CustomCaipNetwork<'sui'> = {
+      id: 784,
+      chainNamespace: 'sui' as const,
+      caipNetworkId: 'sui:mainnet',
+      name: 'Sui',
+      nativeCurrency: { name: 'SUI', symbol: 'SUI', decimals: 9 },
+      rpcUrls: { default: { http: ['https://fullnode.mainnet.sui.io:443'] } }
+    }
 
-<Tabs>
-  <Tab title="Wagmi">
-    8. Initialize `coinbaseConnector` and add it in `extraConnectors`
+    export const networks = [suiMainnet] as [AppKitNetwork, ...AppKitNetwork[]]
 
-    ```tsx
-    import { coinbaseConnector } from '@reown/appkit-coinbase-wagmi-react-native'
-    import { MMKV } from 'react-native-mmkv'
+    export async function getUniversalConnector() {
+      const universalConnector = await UniversalConnector.init({
+        projectId,
+        metadata: {
+          name: 'Universal Connector',
+          description: 'Universal Connector',
+          url: 'https://appkit.reown.com',
+          icons: ['https://appkit.reown.com/icon.png']
+        },
+        networks: [
+          {
+            methods: ['sui_signPersonalMessage'],
+            chains: [suiMainnet as CustomCaipNetwork],
+            events: [],
+            namespace: 'sui'
+          }
+        ]
+      })
 
-    const coinbase = coinbaseConnector({
-      redirect: 'https://your-app-universal-link.com' || 'YOUR_APP_SCHEME://',
-      storage: new MMKV() // needed if using react native new architecture
-    })
-
-    const wagmiConfig = defaultWagmiConfig({
-      chains,
-      projectId,
-      metadata,
-      extraConnectors: [coinbase]
-    })
+      return universalConnector
+    }
     ```
 
-    * Prefer universal links over custom schemes to avoid an app verification warning on Coinbase Wallet
-  </Tab>
-
-  <Tab title="Ethers">
-    8. Initialize `CoinbaseProvider` and add it in the default config
+    In de App.tsx file you can add :
 
     ```tsx
-    import { CoinbaseProvider } from '@reown/appkit-coinbase-ethers-react-native'
-    import { MMKV } from 'react-native-mmkv'
+    import { useState, useEffect } from 'react'
+    import { getUniversalConnector } from './config' // previous config file
+    import { UniversalConnector } from '@reown/appkit-universal-connector'
 
-    const coinbaseProvider = new CoinbaseProvider({
-      redirect: 'https://your-app-universal-link.com' || 'YOUR_APP_SCHEME://',
-      rpcUrl: mainnet.rpcUrl,
-      storage: new MMKV() // needed if using react native new architecture
-    })
+    export function App() {
+      const [universalConnector, setUniversalConnector] = useState<UniversalConnector>()
+      const [session, setSession] = useState<any>()
 
-    const config = defaultConfig({
-      metadata,
-      coinbase: coinbaseProvider
-    })
+      
+      // Initialize the Universal Connector on component mount
+      useEffect(() => {
+        getUniversalConnector().then(setUniversalConnector)
+      }, [])
+
+      // Set the session state in case it changes
+      useEffect(() => {
+        setSession(universalConnector?.provider.session)
+      }, [universalConnector?.provider.session])
     ```
-
-    * Prefer universal links over custom schemes to avoid an app verification warning on Coinbase Wallet
-  </Tab>
-
-  <Tab title="Ethers v5">
-    8. Initialize `CoinbaseProvider` and add it in the default config
-
-    ```tsx
-    import { CoinbaseProvider } from '@reown/appkit-coinbase-ethers-react-native'
-    import { MMKV } from 'react-native-mmkv'
-
-    const coinbaseProvider = new CoinbaseProvider({
-      redirect: 'https://your-app-universal-link.com' || 'YOUR_APP_SCHEME://',
-      rpcUrl: mainnet.rpcUrl,
-      storage: new MMKV() // needed if using react native new architecture
-    })
-
-    const config = defaultConfig({
-      metadata,
-      coinbase: coinbaseProvider
-    })
-    ```
-
-    * Prefer universal links over custom schemes to avoid an app verification warning on Coinbase Wallet
   </Tab>
 </Tabs>
 
-Check <a href="https://mobilewalletprotocol.github.io/wallet-mobile-sdk/docs/client-sdk/rn-install">Coinbase docs</a> for more detailed information.
-
-## Examples
+## Trigger the modal
 
 <Tabs>
   <Tab title="Wagmi">
-    <Card title="AppKit with Wagmi example" icon="github" href="https://github.com/reown-com/react-native-examples/tree/main/dapps/W3MWagmi">
-      Check the React Native example using Wagmi
-    </Card>
-  </Tab>
+    To open AppKit you can use our [**web component**](../../core/components) or build your own button with AppKit [**hooks**](../../core/hooks.mdx#useAppKit).
+    In this example we are going to use the `<appkit-button>` component.
 
-  <Tab title="Ethers">
-    <Card title="AppKit with Ethers example" icon="github" href="https://github.com/reown-com/react-native-examples/tree/main/dapps/W3MEthers">
-      Check the React Native example using Ethers
-    </Card>
+    Web components are global html elements that don't require importing.
+
+    ```tsx
+    export default function ConnectButton() {
+      return <appkit-button />
+    }
+    ```
+
+    Learn more about the AppKit web components [here](../../core/components)
   </Tab>
 
   <Tab title="Ethers v5">
-    <Card title="AppKit with Ethers v5 example" icon="github" href="https://github.com/reown-com/react-native-examples/tree/main/dapps/W3MEthers5">
-      Check the React Native example using Ethers v5
-    </Card>
+    To open AppKit you can use our [**web component**](../core/components) or build your own button with AppKit [**hooks**](../core/hooks.mdx#useAppKit).
+
+    <Tabs>
+      <Tab title="Web Component">
+        ```tsx
+        export default function ConnectButton() {
+          return <appkit-button />;
+        }
+        ```
+
+        Learn more about the AppKit web components [here](../core/components)
+
+        <Info>
+          Web components are global html elements that don't require importing.
+        </Info>
+      </Tab>
+
+      <Tab title="Hooks">
+        You can trigger the modal by calling the `open` function from `useAppKit` hook.
+
+        ```tsx
+        import { useAppKit } from "@reown/appkit/react";
+
+        export default function ConnectButton() {
+          // 4. Use modal hook
+          const { open } = useAppKit();
+
+          return (
+            <>
+              <button onClick={() => open()}>Open Connect Modal</button>
+              <button onClick={() => open({ view: "Networks" })}>
+                Open Network Modal
+              </button>
+            </>
+          );
+        }
+        ```
+
+        Learn more about the AppKit hooks [here](../core/hooks)
+      </Tab>
+    </Tabs>
+  </Tab>
+
+  <Tab title="Ethers">
+    To open AppKit you can use our [**web component**](../../core/components) or build your own button with AppKit [**hooks**](../../core/hooks.mdx#useAppKit).
+
+    <Tabs>
+      <Tab title="Web Component">
+        ```tsx
+        export default function ConnectButton() {
+          return <appkit-button />;
+        }
+        ```
+
+        Learn more about the AppKit web components [here](../../core/components)
+
+        <Info>
+          Web components are global html elements that don't require importing.
+        </Info>
+      </Tab>
+
+      <Tab title="Hooks">
+        You can trigger the modal by calling the `open` function from `useAppKit` hook.
+
+        ```tsx
+        import { useAppKit } from "@reown/appkit/react";
+
+        export default function ConnectButton() {
+          // 4. Use modal hook
+          const { open } = useAppKit();
+
+          return (
+            <>
+              <button onClick={() => open()}>Open Connect Modal</button>
+              <button onClick={() => open({ view: "Networks" })}>
+                Open Network Modal
+              </button>
+            </>
+          );
+        }
+        ```
+
+        Learn more about the AppKit hooks [here](../../core/hooks)
+      </Tab>
+    </Tabs>
+  </Tab>
+
+  <Tab title="Solana">
+    To open AppKit you can use our default [web components](../../core/components) or build your own logic using [AppKit hooks](../../core/hooks).
+    In this example we are going to use the `<appkit-button>` component.
+
+    Web components are global html elements that don't require importing.
+
+    ```tsx
+    export default function ConnectButton() {
+      return <appkit-button />
+    }
+    ```
+  </Tab>
+
+  <Tab title="Bitcoin">
+    To open AppKit you can use our default [web components](../../core/components) or build your own logic using [AppKit hooks](../../core/hooks).
+    In this example we are going to use the `<appkit-button>` component.
+
+    Web components are global html elements that don't require importing.
+
+    ```tsx
+    export default function ConnectButton() {
+      return <appkit-button />
+    }
+    ```
+  </Tab>
+
+  <Tab title="Others networks (AppKit Core)">
+    To open AppKit Core you need to call the `connect` function from the Universal Connector.
+
+    ```tsx
+        // get the session from the universal connector
+        const handleConnect = async () => {
+          if (!universalConnector) {
+            return
+          }
+      
+          const { session: providerSession } = await universalConnector.connect()
+          setSession(providerSession)
+        };
+
+        // disconnect the universal connector
+        const handleDisconnect = async () => {
+          if (!universalConnector) {
+            return
+          }
+          await universalConnector.disconnect()
+          setSession(null)
+        };
+
+        ...
+
+        return (
+        (
+        <div>      
+            <button onClick={handleConnect}>Open AppKit Core</button>
+            <button onClick={handleDisconnect}>Disconnect</button>
+        </div>
+        )
+    ```
   </Tab>
 </Tabs>
 
-## Test Apps
+## Smart Contract Interaction
 
-Want to see AppKit in action? Download our sample AppKit apps below and explore what it can do. Enjoy! 😊
+<Tabs>
+  <Tab title="Wagmi">
+    [Wagmi hooks](https://wagmi.sh/react/api/hooks/useReadContract) can help us interact with wallets and smart contracts:
 
-* [Android Build (Firebase)](https://appdistribution.firebase.google.com/pub/i/0297fbd3de8f1e3f)
-* [iOS Build (Testflight)](https://testflight.apple.com/join/YW2jD2s0)
+    ```tsx
+    import { useReadContract } from "wagmi";
+    import { USDTAbi } from "../abi/USDTAbi";
 
-## Tutorial
+    const USDTAddress = "0x...";
+
+    function App() {
+      const result = useReadContract({
+        abi: USDTAbi,
+        address: USDTAddress,
+        functionName: "totalSupply",
+      });
+    }
+    ```
+
+    Read more about Wagmi hooks for smart contract interaction [here](https://wagmi.sh/react/hooks/useReadContract).
+  </Tab>
+
+  <Tab title="Ethers">
+    [Ethers](https://docs.ethers.org/v6/) can help us interact with wallets and smart contracts:
+
+    ```tsx
+    import { useAppKitProvider, useAppKitAccount } from "@reown/appkit/react";
+    import { BrowserProvider, Contract, formatUnits } from "ethers";
+
+    const USDTAddress = "0x617f3112bf5397D0467D315cC709EF968D9ba546";
+
+    // The ERC-20 Contract ABI, which is a common contract interface
+    // for tokens (this is the Human-Readable ABI format)
+    const USDTAbi = [
+      "function name() view returns (string)",
+      "function symbol() view returns (string)",
+      "function balanceOf(address) view returns (uint)",
+      "function transfer(address to, uint amount)",
+      "event Transfer(address indexed from, address indexed to, uint amount)",
+    ];
+
+    function Components() {
+      const { address, isConnected } = useAppKitAccount();
+      const { walletProvider } = useAppKitProvider("eip155");
+
+      async function getBalance() {
+        if (!isConnected) throw Error("User disconnected");
+
+        const ethersProvider = new BrowserProvider(walletProvider);
+        const signer = await ethersProvider.getSigner();
+        // The Contract object
+        const USDTContract = new Contract(USDTAddress, USDTAbi, signer);
+        const USDTBalance = await USDTContract.balanceOf(address);
+
+        console.log(formatUnits(USDTBalance, 18));
+      }
+
+      return <button onClick={getBalance}>Get User Balance</button>;
+    }
+    ```
+  </Tab>
+
+  <Tab title="Solana">
+    [@Solana/web3.js](https://solana.com/docs/clients/javascript) library allows for seamless interaction with wallets and smart contracts on the Solana blockchain.
+
+    For a practical example of how it works, you can refer to our [lab dApp](https://appkit-lab.reown.com/appkit/?name=solana).
+
+    ```tsx
+    import {
+      SystemProgram,
+      PublicKey,
+      Keypair,
+      Transaction,
+      TransactionInstruction,
+      LAMPORTS_PER_SOL
+    } from '@solana/web3.js'
+    import { useAppKitAccount, useAppKitProvider } from '@reown/appkit/react'
+    import { useAppKitConnection, type Provider } from '@reown/appkit-adapter-solana/react'
+
+    function deserializeCounterAccount(data?: Buffer): { count: number } {
+      if (data?.byteLength !== 8) {
+        throw Error('Need exactly 8 bytes to deserialize counter')
+      }
+
+      return {
+        count: Number(data[0])
+      }
+    }
+
+    const { address } = useAppKitAccount()
+    const { connection } = useAppKitConnection()
+    const { walletProvider } = useAppKitProvider<Provider>('solana')
+
+    async function onIncrementCounter() {
+      const PROGRAM_ID = new PublicKey('Cb5aXEgXptKqHHWLifvXu5BeAuVLjojQ5ypq6CfQj1hy')
+
+      const counterKeypair = Keypair.generate()
+      const counter = counterKeypair.publicKey
+
+      const balance = await connection.getBalance(walletProvider.publicKey)
+      if (balance < LAMPORTS_PER_SOL / 100) {
+        throw Error('Not enough SOL in wallet')
+      }
+
+      const COUNTER_ACCOUNT_SIZE = 8
+      const allocIx: TransactionInstruction = SystemProgram.createAccount({
+        fromPubkey: walletProvider.publicKey,
+        newAccountPubkey: counter,
+        lamports: await connection.getMinimumBalanceForRentExemption(COUNTER_ACCOUNT_SIZE),
+        space: COUNTER_ACCOUNT_SIZE,
+        programId: PROGRAM_ID
+      })
+
+      const incrementIx: TransactionInstruction = new TransactionInstruction({
+        programId: PROGRAM_ID,
+        keys: [
+          {
+            pubkey: counter,
+            isSigner: false,
+            isWritable: true
+          }
+        ],
+        data: Buffer.from([0x0])
+      })
+
+      const tx = new Transaction().add(allocIx).add(incrementIx)
+
+      tx.feePayer = walletProvider.publicKey
+      tx.recentBlockhash = (await connection.getLatestBlockhash('confirmed')).blockhash
+
+      await walletProvider.signAndSendTransaction(tx, [counterKeypair])
+
+      const counterAccountInfo = await connection.getAccountInfo(counter, {
+        commitment: 'confirmed'
+      })
+
+      if (!counterAccountInfo) {
+        throw new Error('Expected counter account to have been created')
+      }
+
+      const counterAccount = deserializeCounterAccount(counterAccountInfo?.data)
+
+      if (counterAccount.count !== 1) {
+        throw new Error('Expected count to have been 1')
+      }
+
+      console.log(`[alloc+increment] count is: ${counterAccount.count}`);
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Video Tutorial
 
 <div style={{ position: 'relative', width: '100%', paddingBottom: '56.25%', height: 0 }}>
   <iframe
@@ -1044,7 +997,7 @@ Want to see AppKit in action? Download our sample AppKit apps below and explore 
     maxWidth: '560px',
     margin: '0 auto'
   }}
-    src="https://www.youtube.com/embed/R0edIW72fHo?si=KRMqX2AZZPDH7Xig"
+    src="https://www.youtube.com/embed/lxTGqXh7LiA?si=1MQMbtqQtM6KSfE0"
     title="YouTube video player"
     frameBorder="0"
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
