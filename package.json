@@ -1,0 +1,13 @@
+{
+  "name": "bundle",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "setup": "chmod +x ./scripts/setup-env.sh && ./scripts/setup-env.sh",
+    "dev": "npm run setup && concurrently \"cd frontend && npm run dev\" \"cd backend && npm run dev\"",
+    "build": "npm run setup && concurrently \"cd frontend && npm run build\" \"cd backend && npm run build\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

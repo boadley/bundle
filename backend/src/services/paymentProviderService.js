@@ -42,24 +42,25 @@ let uuidv4;
 // }
 // --- REPLACED FUNCTION --- IN PLACE OF PAYSTACK API FOR THOROUGH TESTING
 async function resolveBankAccount(accountNumber, bankCode) {
-    console.log(`[SIMULATION] Resolving account: ${accountNumber}`);
+    console.log(`[SIMULATION] Resolving account: ${accountNumber}, bankCode: ${bankCode}`);
 
     // Magic number to trigger a failure simulation
     if (accountNumber === '9999999999') {
-        // Simulate a "not found" error from Paystack, matching original error handling
-        return Promise.resolve({
-            error: true,
-            message: "Could not resolve account name. Check parameters or try again."
-        });
+        throw new Error('Account not found');
     }
 
-    // For any other account number, simulate success, returning the unwrapped data to match original
-    return Promise.resolve({
-        account_number: accountNumber,
-        account_name: "Kevin 0. Ikeduba", // Provide a consistent mock name
-        bank_id: 21
-    });
+    // For other numbers, simulate success with a mock response
+    return {
+        accountName: `Kevin O. Ikeduba`,
+        accountNumber: accountNumber
+    };
 }
+
+module.exports = {
+    resolveBankAccount,
+    executeBankTransfer,
+    executeAirtimePurchase
+};
 
 
 // --- REPLACED FUNCTION --- IN PLACE OF PAYSTACK API FOR THOROUGH TESTING

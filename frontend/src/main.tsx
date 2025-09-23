@@ -27,15 +27,15 @@ const hederaTestnet: AppKitNetwork = {
 // Setup queryClient
 const queryClient = new QueryClient();
 
-// Get projectId
-const projectId = 'a4c97a6942dda38a1de34a6b66647344';
+// Import config
+import config from './config';
 
 // Create a metadata object
 const metadata = {
-  name: 'Bundle',
-  description: 'Spend Crypto on Anything in Nigeria',
-  url: 'http://localhost:5173',
-  icons: ['https://avatars.githubusercontent.com/u/179229932']
+  name: config.app.name,
+  description: config.app.description,
+  url: config.app.url,
+  icons: [config.app.icon]
 };
 
 // Set the networks
@@ -44,7 +44,7 @@ const networks = [mainnet, arbitrum, hederaTestnet] as [AppKitNetwork, ...AppKit
 // Create Wagmi Adapter
 const wagmiAdapter = new WagmiAdapter({
   networks,
-  projectId,
+  projectId: config.projectId,
   ssr: true
 });
 
@@ -52,7 +52,7 @@ const wagmiAdapter = new WagmiAdapter({
 createAppKit({
   adapters: [wagmiAdapter],
   networks,
-  projectId,
+  projectId: config.projectId,
   metadata,
   features: {
     analytics: true

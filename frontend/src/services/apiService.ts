@@ -1,10 +1,13 @@
 import axios from 'axios';
+import config from '../config';
 
 const api = axios.create({
-  baseURL: 'http://localhost:3000/api',
+  baseURL: config.api.url,
   headers: {
     'Content-Type': 'application/json',
   },
+  // Increase timeout for transaction verification
+  timeout: 10000, // 10 seconds
 });
 
 export interface ResolveAccountRequest {
@@ -17,7 +20,8 @@ export interface ResolveAccountResponse {
 }
 
 export interface InitiatePaymentRequest {
-  transactionId: string;
+  transactionHash: string;
+  userAddress: string;
   paymentType: 'bank' | 'airtime';
   details: {
     amount: number;
@@ -38,9 +42,6 @@ export const initiatePayment = async (request: InitiatePaymentRequest): Promise<
   await api.post('/initiate-payment', request);
 };
 
-export const sponsorTransaction = async (signedTxBytes: Uint8Array): Promise<Uint8Array> => {
-  const response = await api.post('/sponsor-transaction', { signedTxBytes: Array.from(signedTxBytes) });
-  return new Uint8Array(response.data.signedTxBytes);
-};
+// [Removed] sponsorTransaction - No longer needed with EVM implementation
 
 export default api;

@@ -9,67 +9,107 @@ const {
     executeAirtimePurchase,
 } = require("../services/paymentProviderService");
 
-// POST /sponsor-transaction
-router.post("/sponsor-transaction", async (req, res) => {
-    try {
-        const { unsignedTxBytes } = req.body;
-        if (!unsignedTxBytes) {
-            return res.status(400).json({ error: "unsignedTxBytes is required" });
-        }
-        // unsignedTxBytes should be base64 encoded from frontend
-        const txBytes = Buffer.from(unsignedTxBytes, "base64");
-        const signedTxBytes = await hederaService.sponsorTransaction(txBytes);
-        res.json({ signedTxBytes: Buffer.from(signedTxBytes).toString("base64") });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+// Bank name to code mapping
+const BANK_CODES = {
+    'GTBank': '058',
+    'Zenith Bank': '057',
+    'Access Bank': '044',
+    'UBA': '033'
+};
+
+// Helper function to get bank code from name
+function getBankCode(bankName) {
+    const code = BANK_CODES[bankName];
+    if (!code) {
+        throw new Error(`Invalid bank name: ${bankName}`);
     }
-});
+    return code;
+}
 
-// // POST /initiate-payment
-// router.post("/initiate-payment", async (req, res) => {
-//     try {
-//         const { paymentType, details, transactionId } = req.body;
-//         if (!paymentType || !details || !transactionId) {
-//             return res.status(400).json({ error: "paymentType, details, and transactionId are required" });
-//         }
+// [REMOVED] Sponsorship endpoint removed as part of EVM migration
 
-//         // Wait for Hedera transaction confirmation
-//         await hederaService.listenForConfirmation(transactionId);
-
-//         let result;
-//         if (paymentType === "airtime") {
-//             // details: { phoneNumber, amount }
-//             result = executeAirtimePurchase(details.phoneNumber, details.amount);
-//         } else if (paymentType === "bank_transfer") {
-//             // details: { accountNumber, bankCode, amount, accountName, reason }
-//             const amountInKobo = Math.round(Number(details.amount) * 100);
-//             result = await executeBankTransfer(
-//                 details.accountNumber,
-//                 details.bankCode,
-//                 amountInKobo,
-//                 details.accountName,
-//                 details.reason
-//             );
-//         } else {
-//             return res.status(400).json({ error: "Invalid paymentType" });
-//         }
-
-//         res.json({ status: "completed", paymentResult: result });
-//     } catch (err) {
-//         res.status(500).json({ error: err.message });
-//     }
-// });
 // POST /initiate-payment
 router.post("/initiate-payment", async (req, res) => {
     try {
-        console.log("Route started - req.body:", JSON.stringify(req.body, null, 2)); // Log incoming payload
-
-        const { paymentType, details, transactionId } = req.body;
-        if (!paymentType || !details || !transactionId) {
+        console.log("Route started - req.body:", JSON.stringify(req.body, null, 2));
+        
+        const { paymentType, details, transactionHash, userAddress } = req.body;
+        
+        if (!paymentType || !details || !transactionHash || !userAddress) {
             console.log("Validation failed - missing fields");
-            return res.status(400).json({ error: "paymentType, details, and transactionId are required" });
+            return res.status(400).json({ 
+                error: "paymentType, details, transactionHash, and userAddress are required" 
+            });
         }
-        console.log("Validation passed - proceeding to Hedera confirmation");
+
+        console.log("Validating transaction...");
+        
+        // Get treasury address from environment
+        const treasuryAddress = process.env.TREASURY_ADDRESS;
+        if (!treasuryAddress) {
+            throw new Error('Treasury address not configured');
+        }
+
+        // Verify the transaction matches expected parameters
+        const isValid = await hederaService.verifyTransaction(
+            transactionHash,
+            userAddress,
+            treasuryAddress
+        );
+
+        if (!isValid) {
+            console.log("Transaction verification failed");
+            return res.status(400).json({ 
+                error: "Transaction verification failed" 
+            });
+        }
+
+        console.log("Transaction verified, waiting for confirmation...");
+
+        // Wait for Hedera transaction confirmation
+        const txResult = await hederaService.listenForConfirmation(transactionHash);
+        
+        if (!txResult) {
+            console.log("Transaction failed to confirm");
+            return res.status(400).json({ 
+                error: "Transaction failed to confirm" 
+            });
+        }
+
+        console.log("Transaction confirmed, processing payment...");
+
+        let result;
+        if (paymentType === "airtime") {
+            // details: { phoneNumber, amount }
+            console.log("Processing airtime purchase...");
+            result = await executeAirtimePurchase(details.phoneNumber, details.amount);
+        } else if (paymentType === "bank") {
+            // details: { accountNumber, bankName, amount, accountName }
+            console.log("Processing bank transfer...");
+            const bankCode = getBankCode(details.bankName);
+            const amountInKobo = Math.round(Number(details.amount) * 100);
+            result = await executeBankTransfer(
+                details.accountNumber,
+                bankCode,
+                amountInKobo,
+                details.accountName
+            );
+        } else {
+            console.log(`Invalid payment type: ${paymentType}`);
+            return res.status(400).json({ 
+                error: "Invalid payment type. Must be 'bank' or 'airtime'" 
+            });
+        }
+
+        console.log("Payment processed successfully");
+        res.json({ success: true, result });
+    } catch (err) {
+        console.error('Payment initiation error:', err);
+        res.status(500).json({ 
+            error: err.message || "Internal server error"
+        });
+    }
+});
 
         // Wait for Hedera transaction confirmation
         console.log(`About to call listenForConfirmation for txId: ${transactionId}`);
@@ -111,10 +151,13 @@ router.post("/initiate-payment", async (req, res) => {
  // POST /resolve-account
 router.post("/resolve-account", async (req, res) => {
     try {
-        const { accountNumber, bankCode } = req.body;
-        if (!accountNumber || !bankCode) {
-            return res.status(400).json({ error: "accountNumber and bankCode are required" });
+        const { accountNumber, bankName } = req.body;
+        if (!accountNumber || !bankName) {
+            return res.status(400).json({ error: "accountNumber and bankName are required" });
         }
+        
+        // Convert bank name to code if needed by your payment provider
+        const bankCode = getBankCode(bankName);
         const result = await resolveBankAccount(accountNumber, bankCode);
         res.json(result);
     } catch (err) {

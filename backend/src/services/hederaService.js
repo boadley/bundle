@@ -1,173 +1,145 @@
-const fetch = require('node-fetch'); // Ensure node-fetch is installed for server-side HTTP requests
-const { Client, AccountId, PrivateKey, TransferTransaction, TransactionReceiptQuery, TransactionId, Status, Hbar, AccountBalanceQuery, Transaction } = require("@hashgraph/sdk");
+const fetch = require('node-fetch');
 require("dotenv").config();
 
-function getClient() {
-    const accountId = process.env.HEDERA_ACCOUNT_ID;
-    const privateKey = process.env.HEDERA_PRIVATE_KEY;
-    console.log('Hedera env - Account ID:', accountId ? 'set' : 'missing');
-    console.log('Hedera env - Private Key:', privateKey ? 'set' : 'missing');
-    if (!accountId || !privateKey) {
-        throw new Error("Missing HEDERA_ACCOUNT_ID or HEDERA_PRIVATE_KEY in environment variables.");
+// Hedera Mirror Node API endpoint for Testnet
+const MIRROR_NODE_URL = 'https://testnet.mirrornode.hedera.com/api/v1';
+const MAX_RETRY_ATTEMPTS = 30;
+const RETRY_DELAY = 2000; // 2 seconds
+
+/**
+ * Fetch transaction result from Mirror Node
+ * @param {string} txHash - The EVM transaction hash (without 0x prefix)
+ * @returns {Promise<Object>} - Transaction result details
+ */
+async function fetchTransactionResult(txHash) {
+    // Remove '0x' prefix if present
+    const cleanHash = txHash.replace('0x', '');
+    const url = `${MIRROR_NODE_URL}/contracts/results/${cleanHash}`;
+    
+    const response = await fetch(url);
+    if (!response.ok) {
+        if (response.status === 404) {
+            return null; // Transaction not found yet
+        }
+        throw new Error(`Mirror node error: ${response.status}`);
     }
-    const client = Client.forTestnet();
-    client.setOperator(AccountId.fromString(accountId), PrivateKey.fromStringECDSA(privateKey));
-    return client;
+
+    return response.json();
 }
 
 /**
- * Get account balance using REST API.
- * @param {string} accountId - The account ID to query.
- * @returns {Promise<string>} - The balance in HBAR as string.
+ * Normalize address to EVM format
+ * @param {string} address - Address to normalize
+ * @returns {string} - Normalized address
  */
-async function getBalance(accountId) {
-  const client = getClient();
-  try {
-    const query = new AccountBalanceQuery()
-      .setAccountId(AccountId.fromString(accountId));
-    const balance = await query.execute(client);
-    return balance.hbars.toString();
-  } catch (error) {
-    console.error('Error getting balance:', error);
-    throw error;
-  }
-}
-
-/**
- * Create unsigned transfer transaction for airtime or bank transfer.
- * @param {string} txType - 'airtime' or 'bank'.
- * @param {string} amountHbar - Amount in HBAR as string.
- * @param {string} recipientId - Recipient account ID (for mock, use test account).
- * @param {string} userAccountId - The user account ID who is sending the amount.
- * @returns {Promise<Uint8Array>} - Unsigned transaction bytes.
- */
-async function createUnsignedTx(txType, amountHbar, recipientId, userAccountId) {
-  const client = getClient();
-  try {
-    const amount = Hbar.from(amountHbar, Hbar.Unit.Hbar);
-    const recipient = AccountId.fromString(recipientId || '0.0.96'); // Testnet faucet or mock
-    const userAccount = AccountId.fromString(userAccountId);
-    const tx = new TransferTransaction()
-      .addHbarTransfer(userAccount, amount.negated()) // user pays amount
-      .addHbarTransfer(recipient, amount);            // recipient receives amount
-    const unsignedTx = await tx.freezeWith(client);
-    return unsignedTx.toBytes();
-  } catch (error) {
-    console.error('Error creating unsigned tx:', error);
-    throw error;
-  }
-}
-
-/**
- * Submit signed transaction bytes.
- * @param {Uint8Array} signedTxBytes - Signed transaction bytes.
- * @returns {Promise<string>} - Transaction ID.
- */
-async function submitSignedTx(signedTxBytes) {
-  const client = getClient();
-  try {
-    const tx = Transaction.fromBytes(signedTxBytes);
-    await tx.signWithOperator(client); // ensure operator signature for sponsorship
-    const resp = await tx.execute(client);
-    const receipt = await new TransactionReceiptQuery().setTransactionId(resp.transactionId).execute(client);
-    if (receipt.status.toString() !== Status.SUCCESS.toString()) {
-      throw new Error(`Transaction failed with status: ${receipt.status.toString()}`);
+function normalizeAddress(address) {
+    // Convert Hedera format (0.0.xxxxx) to EVM format if needed
+    if (address.startsWith('0x')) {
+        return address.toLowerCase();
     }
-    return resp.transactionId.toString();
-  } catch (error) {
-    console.error('Error submitting signed tx:', error);
-    throw error;
-  }
+    // Convert from decimal to hex and ensure proper formatting
+    const hex = Number(address).toString(16).padStart(40, '0');
+    return `0x${hex}`.toLowerCase();
 }
 
 /**
- * Sponsors a transaction by partially signing it as the fee payer.
- * @param {Uint8Array} unsignedTxBytes - The raw bytes of the unsigned transaction.
- * @returns {Promise<Uint8Array>} - The bytes of the partially signed transaction.
+ * Verify transaction details from Mirror Node
+ * @param {string} txHash - The EVM transaction hash
+ * @param {string} expectedSender - Expected sender address
+ * @param {string} expectedRecipient - Expected recipient address
+ * @returns {Promise<boolean>} - Whether the transaction is valid
  */
-async function sponsorTransaction(unsignedTxBytes) {
-    const client = getClient();
+async function verifyTransaction(txHash, expectedSender, expectedRecipient) {
     try {
-        const tx = TransferTransaction.fromBytes(unsignedTxBytes);
-        const signedTx = await tx.signWithOperator(client);
-        return signedTx.toBytes();
-    } catch (err) {
-        throw new Error("Failed to sponsor transaction: " + err.message);
-    }
-}
+        // Poll until we get a result or timeout
+        for (let attempt = 0; attempt < MAX_RETRY_ATTEMPTS; attempt++) {
+            const result = await fetchTransactionResult(txHash);
+            
+            if (result) {
+                // Normalize addresses for comparison
+                const normalizedFrom = normalizeAddress(result.from);
+                const normalizedTo = normalizeAddress(result.to);
+                const normalizedExpectedSender = normalizeAddress(expectedSender);
+                const normalizedExpectedRecipient = normalizeAddress(expectedRecipient);
 
-/**
- * Polls the Hedera mirror node REST API for confirmation of a transaction by ID.
- * Resolves when the transaction status is SUCCESS.
- * @param {string} txId - The transaction ID to confirm (e.g., "0.0.6871104@1758294746.743881069" or "0.0.6871104-1758294746-743881069").
- * @returns {Promise<object>} - The transaction details from the mirror node.
- */
-async function listenForConfirmation(txId) {
-    const maxAttempts = 10; // 20s max
-    const delayMs = 2000;
-    let attempts = 0;
+                // Verify transaction details
+                const senderMatches = normalizedFrom === normalizedExpectedSender;
+                const recipientMatches = normalizedTo === normalizedExpectedRecipient;
+                const isSuccessful = result.result === 'SUCCESS' && result.status === '0x1';
 
-    // Validate transaction ID format (accepts @ or - between account and timestamp)
-    const txIdRegex = /^\d+\.\d+\.\d+[@-]\d+\.\d{9}$/;
-    if (!txIdRegex.test(txId)) {
-        throw new Error(`Invalid transaction ID format: ${txId}. Expected format: shard.realm.num@seconds.nanos or shard.realm.num-seconds-nanos (9-digit nanoseconds)`);
-    }
-
-    // Convert transaction ID to mirror node format (shard.realm.num-seconds-nanos)
-    const formattedTxId = txId.replace(/(.*)@(.*)\.(.*)/, '$1-$2-$3');
-
-    while (attempts < maxAttempts) {
-        console.log(`Polling attempt ${attempts + 1} for txId: ${txId}`);
-        console.log(`Fetching: https://testnet.mirrornode.hedera.com/api/v1/transactions/${formattedTxId}`);
-        try {
-            const response = await fetch(
-                `https://testnet.mirrornode.hedera.com/api/v1/transactions/${formattedTxId}`,
-                { headers: { 'Accept': 'application/json' } }
-            );
-
-            if (!response.ok) {
-                const errorText = await response.text().catch(() => 'No error details available');
-                if (response.status === 404) {
-                    console.log(`Transaction ${txId} not found (status ${response.status}: ${errorText}), retrying...`);
-                } else if (response.status === 429) {
-                    console.warn(`Rate limit hit for txId ${txId}, retrying after delay...`);
-                } else {
-                    throw new Error(`HTTP error! status: ${response.status}, details: ${errorText}`);
-                }
-            } else {
-                const data = await response.json();
-                const transaction = data.transactions && data.transactions.length > 0 ? data.transactions[0] : null;
-
-                if (transaction) {
-                    if (transaction.result === 'SUCCESS') {
-                        console.log(`Transaction ${txId} confirmed with status: ${transaction.result}`);
-                        return transaction;
-                    } else {
-                        throw new Error(`Transaction failed with status: ${transaction.result}`);
+                console.log('Transaction verification:', {
+                    senderMatches,
+                    recipientMatches,
+                    isSuccessful,
+                    normalizedFrom,
+                    normalizedTo,
+                    normalizedExpectedSender,
+                    normalizedExpectedRecipient,
+                    result: {
+                        status: result.status,
+                        result: result.result,
+                        error: result.error_message
                     }
-                }
-                console.log(`Transaction ${txId} not found yet, retrying...`);
+                });
+
+                return senderMatches && recipientMatches && isSuccessful;
             }
-        } catch (err) {
-            console.error(`Error polling txId ${txId}: ${err.message}`);
-            // Continue polling for retryable errors (e.g., network issues)
-            if (err.message.includes('HTTP error')) {
-                throw err; // Propagate non-retryable HTTP errors
-            }
+
+            // Wait before next attempt
+            await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
         }
 
-        await new Promise(res => setTimeout(res, delayMs));
-        attempts++;
+        throw new Error('Transaction verification timeout');
+    } catch (error) {
+        console.error('Error verifying transaction:', error);
+        return false;
+    }
+}
+
+/**
+ * Wait for transaction confirmation using Mirror Node
+ * @param {string} txHash - The EVM transaction hash (e.g., "0x109b7ad5890f2c2cccf8536bc6065674b9be1b462b835fdccbdd39c1780e00f2")
+ * @returns {Promise<object>} - Transaction result details from the mirror node
+ */
+async function listenForConfirmation(txHash) {
+    if (!txHash.startsWith('0x')) {
+        throw new Error('Invalid EVM transaction hash format. Hash must start with 0x');
     }
 
-    throw new Error(`Transaction confirmation timed out after ${maxAttempts * delayMs / 1000} seconds for txId: ${txId}`);
+    for (let attempt = 0; attempt < MAX_RETRY_ATTEMPTS; attempt++) {
+        try {
+            const result = await fetchTransactionResult(txHash);
+            if (result) {
+                // Check both result and status fields
+                const isSuccessful = result.result === 'SUCCESS' && result.status === '0x1';
+                
+                // If transaction failed, throw error with any available message
+                if (!isSuccessful) {
+                    throw new Error(result.error_message || `Transaction failed with status: ${result.status}`);
+                }
+                
+                console.log(`Transaction ${txHash} confirmed with status: SUCCESS`);
+                return result;
+            }
+            
+            console.log(`Transaction ${txHash} not found yet, retrying... (attempt ${attempt + 1}/${MAX_RETRY_ATTEMPTS})`);
+            await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
+        } catch (error) {
+            console.error(`Attempt ${attempt + 1} failed:`, error);
+            if (attempt === MAX_RETRY_ATTEMPTS - 1) {
+                throw error;
+            }
+            // For retryable errors, continue polling
+            if (!error.message.includes('Mirror node error: 404')) {
+                throw error; // Propagate non-retryable errors
+            }
+        }
+    }
+    
+    throw new Error(`Transaction confirmation timed out after ${MAX_RETRY_ATTEMPTS * RETRY_DELAY / 1000} seconds for hash: ${txHash}`);
 }
 
 module.exports = {
-    getClient,
-    getBalance,
-    createUnsignedTx,
-    submitSignedTx,
-    sponsorTransaction,
-    listenForConfirmation,
+    verifyTransaction,
+    listenForConfirmation
 };
