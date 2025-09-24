@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Button from './Button';
 import { useBundle } from '../hooks/useBundle';
 import { resolveAccount } from '../services/apiService';
 import { toast } from 'react-hot-toast';
 import { IoCheckmarkCircleOutline, IoTimeOutline } from 'react-icons/io5';
+import ConfirmationModal from './ConfirmationModal';
 
 const banks = [
   { name: 'GTBank', code: '058' },
@@ -21,54 +23,7 @@ const mockRecentTransfers = [
   { name: 'Mike Johnson', bank: 'Access Bank', accountNumber: '0456789123', amount: '₦10,000' }
 ];
 
-interface ConfirmationModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
-  amount: string;
-  accountName: string;
-  bankName: string;
-  accountNumber: string;
-  isLoading: boolean;
-}
 
-function ConfirmationModal({ isOpen, onClose, onConfirm, amount, accountName, bankName, accountNumber, isLoading }: ConfirmationModalProps) {
-  if (!isOpen) return null;
-
-  const hbarCost = (parseFloat(amount) * 0.00085).toFixed(4); // Mock conversion rate
-
-  return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <h3 className="text-lg font-semibold text-white mb-4">Confirm Transfer</h3>
-        <div className="bg-surface/50 rounded-lg p-4 mb-4">
-          <p className="text-white font-medium">{accountName}</p>
-          <p className="text-secondary text-sm">{bankName} • {accountNumber}</p>
-          <p className="text-accent text-lg font-bold mt-2">₦{amount}</p>
-        </div>
-        <p className="text-base text-white mb-6">
-          Total Cost: ~{hbarCost} HBAR
-        </p>
-        <div className="flex gap-3">
-          <button
-            onClick={onClose}
-            className="flex-1 py-3 px-4 border border-disabled text-secondary rounded-xl font-bold"
-            disabled={isLoading}
-          >
-            Cancel
-          </button>
-          <button
-            onClick={onConfirm}
-            className="flex-1 btn-primary"
-            disabled={isLoading}
-          >
-            {isLoading ? 'Processing...' : 'Transfer Now'}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 export default function BankTransferForm() {
   const [amount, setAmount] = useState('');
@@ -81,6 +36,7 @@ export default function BankTransferForm() {
   const [activeTab, setActiveTab] = useState<'recents' | 'favourites'>('recents');
 
   const { executePayment, isLoading } = useBundle();
+  const navigate = useNavigate();
 
   // Auto-verify account when account number and bank are complete
   useEffect(() => {
@@ -101,12 +57,39 @@ export default function BankTransferForm() {
 
   const handleConfirm = () => {
     if (selectedBank) {
-      executePayment('bank', {
-        amount: parseFloat(amount),
-        bankName: selectedBank.name,
-        accountNumber,
-        accountName,
-      });
+      executePayment(
+        'bank', 
+        {
+          amount: parseFloat(amount),
+          bankName: selectedBank.name,
+          accountNumber,
+          accountName,
+        },
+        (transactionId) => {
+          // Navigate to success page
+          navigate('/status', {
+            state: {
+              status: 'success',
+              transactionType: 'bank',
+              amount,
+              recipient: `${accountName} • ${selectedBank.name} • ${accountNumber}`,
+              transactionId,
+            }
+          });
+        },
+        (errorMessage) => {
+          // Navigate to failure page
+          navigate('/status', {
+            state: {
+              status: 'failed',
+              transactionType: 'bank',
+              amount,
+              recipient: `${accountName} • ${selectedBank.name} • ${accountNumber}`,
+              errorMessage,
+            }
+          });
+        }
+      );
       setShowConfirmation(false);
     }
   };
@@ -300,10 +283,11 @@ export default function BankTransferForm() {
         isOpen={showConfirmation}
         onClose={() => setShowConfirmation(false)}
         onConfirm={handleConfirm}
+        title="Confirm Bank Transfer"
+        description={`You are sending ₦${amount} to ${accountName} at ${selectedBank?.name || ''}.`}
         amount={amount}
-        accountName={accountName}
-        bankName={selectedBank?.name || ''}
-        accountNumber={accountNumber}
+        recipient={`${accountName} • ${selectedBank?.name || ''} • ${accountNumber}`}
+        transactionType="bank"
         isLoading={isLoading}
       />
     </>

@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { useAppKit } from '@reown/appkit/react';
 import { useAppKitAccount } from '@reown/appkit/react';
 

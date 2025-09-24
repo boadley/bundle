@@ -75,4 +75,18 @@ body {
   .modal-content {
     @apply card w-full max-w-md;
   }
+
+  /* Bottom sheet animation */
+  .animate-slide-up {
+    animation: slideUp 0.3s ease-out;
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
 }

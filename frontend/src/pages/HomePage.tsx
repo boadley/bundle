@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Header from '../components/Header';
 import MainLayout from '../components/layout/MainLayout';
 import BankTransferForm from '../components/BankTransferForm';

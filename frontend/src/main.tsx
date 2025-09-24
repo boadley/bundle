@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
 import App from './App.tsx';
 import './index.css';
 
@@ -70,8 +71,10 @@ function AppKitProvider({ children }: { children: React.ReactNode }) {
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <AppKitProvider>
-      <App />
-    </AppKitProvider>
+    <BrowserRouter>
+      <AppKitProvider>
+        <App />
+      </AppKitProvider>
+    </BrowserRouter>
   </React.StrictMode>,
 );

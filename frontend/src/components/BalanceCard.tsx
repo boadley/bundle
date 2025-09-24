@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { useAppKitAccount } from '@reown/appkit/react';
 import { useBalance } from 'wagmi';
 

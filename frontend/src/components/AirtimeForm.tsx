@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Button from './Button';
 import { useBundle } from '../hooks/useBundle';
+import ConfirmationModal from './ConfirmationModal';
 
 // Network data with colors for visual representation
 const networks = [
@@ -20,51 +22,7 @@ const presetAmounts = [
   { amount: 2000, cashback: 100 }
 ];
 
-interface ConfirmationModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
-  phoneNumber: string;
-  amount: string;
-  network: string;
-  isLoading: boolean;
-}
 
-function ConfirmationModal({ isOpen, onClose, onConfirm, phoneNumber, amount, network, isLoading }: ConfirmationModalProps) {
-  if (!isOpen) return null;
-
-  const hbarCost = (parseFloat(amount) * 0.00085).toFixed(4); // Mock conversion rate
-
-  return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <h3 className="text-lg font-semibold text-white mb-4">Confirm Purchase</h3>
-        <p className="text-base text-white mb-4">
-          You are sending ₦{amount} {network} Airtime to {phoneNumber}.
-        </p>
-        <p className="text-base text-white mb-6">
-          Total Cost: ~{hbarCost} HBAR
-        </p>
-        <div className="flex gap-3">
-          <button
-            onClick={onClose}
-            className="flex-1 py-3 px-4 border border-disabled text-secondary rounded-xl font-bold"
-            disabled={isLoading}
-          >
-            Cancel
-          </button>
-          <button
-            onClick={onConfirm}
-            className="flex-1 btn-primary"
-            disabled={isLoading}
-          >
-            {isLoading ? 'Processing...' : 'Confirm & Pay'}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 export default function AirtimeForm() {
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -73,6 +31,7 @@ export default function AirtimeForm() {
   const [showConfirmation, setShowConfirmation] = useState(false);
 
   const { executePayment, isLoading } = useBundle();
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -83,11 +42,38 @@ export default function AirtimeForm() {
 
   const handleConfirm = () => {
     if (selectedNetwork) {
-      executePayment('airtime', {
-        phoneNumber,
-        network: selectedNetwork.code,
-        amount: parseFloat(amount),
-      });
+      executePayment(
+        'airtime', 
+        {
+          phoneNumber,
+          network: selectedNetwork.code,
+          amount: parseFloat(amount),
+        },
+        (transactionId) => {
+          // Navigate to success page
+          navigate('/status', {
+            state: {
+              status: 'success',
+              transactionType: 'airtime',
+              amount,
+              recipient: `${phoneNumber} (${selectedNetwork.name})`,
+              transactionId,
+            }
+          });
+        },
+        (errorMessage) => {
+          // Navigate to failure page
+          navigate('/status', {
+            state: {
+              status: 'failed',
+              transactionType: 'airtime',
+              amount,
+              recipient: `${phoneNumber} (${selectedNetwork.name})`,
+              errorMessage,
+            }
+          });
+        }
+      );
       setShowConfirmation(false);
     }
   };
@@ -196,9 +182,11 @@ export default function AirtimeForm() {
         isOpen={showConfirmation}
         onClose={() => setShowConfirmation(false)}
         onConfirm={handleConfirm}
-        phoneNumber={phoneNumber}
+        title="Confirm Airtime Purchase"
+        description={`You are sending ₦${amount} ${selectedNetwork?.name || ''} Airtime to ${phoneNumber}.`}
         amount={amount}
-        network={selectedNetwork?.name || ''}
+        recipient={phoneNumber}
+        transactionType="airtime"
         isLoading={isLoading}
       />
     </>

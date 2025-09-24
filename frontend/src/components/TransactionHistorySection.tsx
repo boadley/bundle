@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { IoPhonePortraitOutline, IoGiftOutline, IoCheckmarkCircle, IoBusiness } from 'react-icons/io5';
 
 interface Transaction {

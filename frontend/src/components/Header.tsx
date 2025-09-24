@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { useAppKitAccount } from '@reown/appkit/react';
 import { IoPersonCircleOutline, IoHelpCircleOutline, IoNotificationsOutline } from 'react-icons/io5';
 import ConnectWalletButton from './ConnectWalletButton';

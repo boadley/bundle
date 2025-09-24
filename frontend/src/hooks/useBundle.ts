@@ -12,14 +12,19 @@ export const useBundle = () => {
   const { sendTransactionAsync } = useSendTransaction();
   const [isLoading, setIsLoading] = useState(false);
 
-  const executePayment = async (paymentType: 'bank' | 'airtime', details: {
-    amount: number;
-    bankName?: string;
-    accountNumber?: string;
-    accountName?: string;
-    phoneNumber?: string;
-    network?: string;
-  }) => {
+  const executePayment = async (
+    paymentType: 'bank' | 'airtime', 
+    details: {
+      amount: number;
+      bankName?: string;
+      accountNumber?: string;
+      accountName?: string;
+      phoneNumber?: string;
+      network?: string;
+    },
+    onSuccess?: (transactionId: string) => void,
+    onError?: (error: string) => void
+  ) => {
     if (!isConnected) {
       toast.error('Wallet not connected');
       return;
@@ -77,13 +82,22 @@ export const useBundle = () => {
       );
 
       toast.success('Payment completed successfully!');
+      
+      // Call success callback with transaction hash
+      if (onSuccess) {
+        onSuccess(hash);
+      }
     } catch (error: any) {
       console.error('Payment error:', error);
-      // Show a more user-friendly error message
-      if (error?.code === 'ERR_BAD_REQUEST') {
-        toast.error('Payment is being processed. Please wait a moment and check your transaction history.');
-      } else {
-        toast.error('Payment failed: ' + (error?.message || 'Unknown error'));
+      const errorMessage = error?.code === 'ERR_BAD_REQUEST' 
+        ? 'Payment is being processed. Please wait a moment and check your transaction history.'
+        : 'Payment failed: ' + (error?.message || 'Unknown error');
+      
+      toast.error(errorMessage);
+      
+      // Call error callback
+      if (onError) {
+        onError(errorMessage);
       }
     } finally {
       setIsLoading(false);
