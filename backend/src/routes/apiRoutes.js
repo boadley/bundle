@@ -111,43 +111,6 @@ router.post("/initiate-payment", async (req, res) => {
     }
 });
 
-        // Wait for Hedera transaction confirmation
-        console.log(`About to call listenForConfirmation for txId: ${transactionId}`);
-        try {
-            await hederaService.listenForConfirmation(transactionId);
-        } catch (hederaErr) {
-            console.error("Hedera confirmation error:", hederaErr);
-            return res.status(504).json({ error: "Hedera transaction confirmation timed out or failed. Please try again or check transaction status." });
-        }
-        console.log("Hedera confirmation received - proceeding to Paystack");
-
-        let result;
-        if (paymentType === "airtime") {
-            // details: { phoneNumber, amount }
-            result = executeAirtimePurchase(details.phoneNumber, details.amount);
-        } else if (paymentType === "bank_transfer") {
-            // details: { accountNumber, bankCode, amount, accountName, reason }
-            const amountInKobo = Math.round(Number(details.amount) * 100);
-            result = await executeBankTransfer(
-                details.accountNumber,
-                details.bankCode,
-                amountInKobo,
-                details.accountName,
-                details.reason
-            );
-        } else {
-            console.log("Invalid paymentType:", paymentType);
-            return res.status(400).json({ error: "Invalid paymentType" });
-        }
-
-        console.log("Paystack execution completed - sending response");
-        res.json({ status: "completed", paymentResult: result });
-    } catch (err) {
-        console.error("Route error:", err); // Enhanced logging
-        res.status(500).json({ error: "An unexpected error occurred. " + err.message });
-    }
-});
-
  // POST /resolve-account
 router.post("/resolve-account", async (req, res) => {
     try {

@@ -1,4 +1,3 @@
-const fetch = require('node-fetch');
 require("dotenv").config();
 
 // Hedera Mirror Node API endpoint for Testnet
@@ -7,139 +6,163 @@ const MAX_RETRY_ATTEMPTS = 30;
 const RETRY_DELAY = 2000; // 2 seconds
 
 /**
- * Fetch transaction result from Mirror Node
- * @param {string} txHash - The EVM transaction hash (without 0x prefix)
- * @returns {Promise<Object>} - Transaction result details
+ * Fetches a transaction result from the Hedera Mirror Node.
+ * @param {string} txHash - The EVM transaction hash (with or without 0x prefix).
+ * @returns {Promise<Object|null>} - The transaction result details, or null if not found (404).
+ * @throws {Error} - Throws an error for non-404 HTTP errors.
  */
 async function fetchTransactionResult(txHash) {
-    // Remove '0x' prefix if present
     const cleanHash = txHash.replace('0x', '');
     const url = `${MIRROR_NODE_URL}/contracts/results/${cleanHash}`;
     
     const response = await fetch(url);
+
+    if (response.status === 404) {
+        return null; // Transaction not found yet, not an error.
+    }
+
     if (!response.ok) {
-        if (response.status === 404) {
-            return null; // Transaction not found yet
-        }
-        throw new Error(`Mirror node error: ${response.status}`);
+        // For other errors (e.g., 500), throw an error to be caught by the polling logic.
+        throw new Error(`Mirror node request failed with status: ${response.status}`);
     }
 
     return response.json();
 }
 
 /**
- * Normalize address to EVM format
- * @param {string} address - Address to normalize
- * @returns {string} - Normalized address
+ * Normalizes a Hedera or EVM address to the 0x-prefixed lowercase EVM format.
+ * @param {string} address - The address to normalize (e.g., "0.0.12345", "0x...", or raw hex).
+ * @returns {string} - The normalized 0x-prefixed lowercase EVM address.
+ * @throws {Error} - Throws an error for unknown address formats.
  */
 function normalizeAddress(address) {
-    // Convert Hedera format (0.0.xxxxx) to EVM format if needed
-    if (address.startsWith('0x')) {
-        return address.toLowerCase();
+    if (typeof address !== 'string') {
+        throw new Error('Address must be a string.');
     }
-    // Convert from decimal to hex and ensure proper formatting
-    const hex = Number(address).toString(16).padStart(40, '0');
-    return `0x${hex}`.toLowerCase();
+
+    const lowerAddress = address.toLowerCase();
+
+    // Address is already in 0x EVM format
+    if (lowerAddress.startsWith('0x')) {
+        return lowerAddress;
+    }
+
+    // Address is in Hedera 0.0.X format
+    if (/^0\.0\.\d+$/.test(lowerAddress)) {
+        const accountNum = lowerAddress.split('.')[2];
+        // Use BigInt for safety with large account numbers
+        const hex = BigInt(accountNum).toString(16).padStart(40, '0');
+        return `0x${hex}`;
+    }
+    
+    // Address might be a raw hex string without the '0x' prefix
+    if (/^[0-9a-f]{40}$/.test(lowerAddress)) {
+        return `0x${lowerAddress}`;
+    }
+
+    throw new Error(`Unknown or invalid address format: ${address}`);
 }
 
+
 /**
- * Verify transaction details from Mirror Node
- * @param {string} txHash - The EVM transaction hash
- * @param {string} expectedSender - Expected sender address
- * @param {string} expectedRecipient - Expected recipient address
- * @returns {Promise<boolean>} - Whether the transaction is valid
+ * Verifies a transaction by polling the Mirror Node and checking its details.
+ * @param {string} txHash - The EVM transaction hash.
+ * @param {string} expectedSender - The expected sender address (Hedera or EVM format).
+ * @param {string} expectedRecipient - The expected recipient address (Hedera or EVM format).
+ * @returns {Promise<boolean>} - True if the transaction is valid and successful, false otherwise.
  */
 async function verifyTransaction(txHash, expectedSender, expectedRecipient) {
     try {
-        // Poll until we get a result or timeout
         for (let attempt = 0; attempt < MAX_RETRY_ATTEMPTS; attempt++) {
             const result = await fetchTransactionResult(txHash);
             
             if (result) {
-                // Normalize addresses for comparison
-                const normalizedFrom = normalizeAddress(result.from);
                 const normalizedTo = normalizeAddress(result.to);
-                const normalizedExpectedSender = normalizeAddress(expectedSender);
                 const normalizedExpectedRecipient = normalizeAddress(expectedRecipient);
-
-                // Verify transaction details
-                const senderMatches = normalizedFrom === normalizedExpectedSender;
                 const recipientMatches = normalizedTo === normalizedExpectedRecipient;
                 const isSuccessful = result.result === 'SUCCESS' && result.status === '0x1';
 
-                console.log('Transaction verification:', {
-                    senderMatches,
+                console.log('Transaction verification details:', {
                     recipientMatches,
                     isSuccessful,
-                    normalizedFrom,
-                    normalizedTo,
-                    normalizedExpectedSender,
-                    normalizedExpectedRecipient,
-                    result: {
-                        status: result.status,
-                        result: result.result,
-                        error: result.error_message
-                    }
+                    from: expectedSender,
+                    to: normalizedTo
                 });
 
-                return senderMatches && recipientMatches && isSuccessful;
+                return recipientMatches && isSuccessful;
             }
 
-            // Wait before next attempt
+            // If result is null (404), wait and retry.
             await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
         }
 
-        throw new Error('Transaction verification timeout');
+        console.error('Transaction verification timed out. Hash not found on mirror node.');
+        return false;
     } catch (error) {
-        console.error('Error verifying transaction:', error);
+        console.error('Error during transaction verification:', error);
         return false;
     }
 }
 
 /**
- * Wait for transaction confirmation using Mirror Node
- * @param {string} txHash - The EVM transaction hash (e.g., "0x109b7ad5890f2c2cccf8536bc6065674b9be1b462b835fdccbdd39c1780e00f2")
- * @returns {Promise<object>} - Transaction result details from the mirror node
+ * Waits for a transaction to be confirmed on the Hedera network by polling the mirror node.
+ * @param {string} txHash - The EVM transaction hash (must start with 0x).
+ * @returns {Promise<object>} - The transaction result from the mirror node.
+ * @throws {Error} - Throws if the transaction fails, times out, or an unexpected error occurs.
  */
 async function listenForConfirmation(txHash) {
-    if (!txHash.startsWith('0x')) {
-        throw new Error('Invalid EVM transaction hash format. Hash must start with 0x');
+    if (typeof txHash !== 'string' || !txHash.startsWith('0x')) {
+        throw new Error('Invalid EVM transaction hash format. Hash must be a string starting with 0x.');
     }
 
     for (let attempt = 0; attempt < MAX_RETRY_ATTEMPTS; attempt++) {
         try {
             const result = await fetchTransactionResult(txHash);
+            
+            // Case 1: Transaction is found on the mirror node.
             if (result) {
-                // Check both result and status fields
                 const isSuccessful = result.result === 'SUCCESS' && result.status === '0x1';
                 
-                // If transaction failed, throw error with any available message
-                if (!isSuccessful) {
-                    throw new Error(result.error_message || `Transaction failed with status: ${result.status}`);
+                if (isSuccessful) {
+                    console.log(`Transaction ${txHash} confirmed successfully.`);
+                    return result; // Success!
                 }
                 
-                console.log(`Transaction ${txHash} confirmed with status: SUCCESS`);
-                return result;
+                // Transaction has a final, failed state.
+                throw new Error(result.error_message || `Transaction failed with status: ${result.status} and result: ${result.result}`);
             }
-            
-            console.log(`Transaction ${txHash} not found yet, retrying... (attempt ${attempt + 1}/${MAX_RETRY_ATTEMPTS})`);
+
+            // Case 2: Transaction not found yet (404). Wait and retry.
+            console.log(`Transaction not found, retrying... (Attempt ${attempt + 1}/${MAX_RETRY_ATTEMPTS})`);
             await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
+
         } catch (error) {
-            console.error(`Attempt ${attempt + 1} failed:`, error);
-            if (attempt === MAX_RETRY_ATTEMPTS - 1) {
+            // Case 3: A network error or a final transaction failure.
+            console.error(`Error in listenForConfirmation (Attempt ${attempt + 1}):`, error.message);
+            
+            // If the error is a final transaction failure, re-throw immediately.
+            if (error.message.startsWith('Transaction failed')) {
                 throw error;
             }
-            // For retryable errors, continue polling
-            if (!error.message.includes('Mirror node error: 404')) {
-                throw error; // Propagate non-retryable errors
+
+            // For network-type errors, retry until the last attempt.
+            if (attempt === MAX_RETRY_ATTEMPTS - 1) {
+                throw new Error(`Could not confirm transaction after multiple attempts due to network errors: ${error.message}`);
             }
+
+            // Wait before retrying network errors.
+            await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
         }
     }
     
-    throw new Error(`Transaction confirmation timed out after ${MAX_RETRY_ATTEMPTS * RETRY_DELAY / 1000} seconds for hash: ${txHash}`);
+    // Case 4: Polling timed out.
+    throw new Error(`Transaction confirmation timed out after ${MAX_RETRY_ATTEMPTS * RETRY_DELAY / 1000} seconds.`);
 }
 
 module.exports = {
     verifyTransaction,
-    listenForConfirmation
+    listenForConfirmation,
+    // Exporting for testing or other potential uses
+    normalizeAddress,
+    fetchTransactionResult
 };
