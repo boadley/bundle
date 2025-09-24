@@ -23,17 +23,17 @@ function ConfirmationModal({ isOpen, onClose, onConfirm, amount, accountName, is
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <h3 className="text-subheadline text-white mb-4">Confirm Transfer</h3>
-        <p className="text-body text-white mb-4">
+        <h3 className="text-lg font-semibold text-white mb-4">Confirm Transfer</h3>
+        <p className="text-base text-white mb-4">
           You are sending ₦{amount} to {accountName}.
         </p>
-        <p className="text-body text-white mb-6">
+        <p className="text-base text-white mb-6">
           Total Cost: ~{usdcCost} USDC
         </p>
         <div className="flex gap-3">
           <button
             onClick={onClose}
-            className="flex-1 py-3 px-4 border border-disabled text-secondary rounded-button font-button"
+            className="flex-1 py-3 px-4 border border-disabled text-secondary rounded-xl font-bold"
             disabled={isLoading}
           >
             Cancel
@@ -104,10 +104,10 @@ export default function BankTransferForm() {
   return (
     <>
       <div className="lg:bg-surface lg:rounded-xl lg:p-6">
-        <h2 className="text-headline text-white mb-6 lg:text-xl lg:mb-4">Bank Transfer</h2>
+        <h2 className="text-2xl font-bold text-white mb-6 lg:text-xl lg:mb-4">Bank Transfer</h2>
         <form className="space-y-6 lg:space-y-4" onSubmit={handleSubmit}>
           <div>
-            <label className="block text-body text-secondary mb-2 lg:text-sm lg:mb-1">Amount (NGN)</label>
+            <label className="block text-base text-secondary mb-2 lg:text-sm lg:mb-1">Amount (NGN)</label>
             <input
               type="number"
               value={amount}
@@ -119,7 +119,7 @@ export default function BankTransferForm() {
           </div>
           
           <div>
-            <label className="block text-body text-secondary mb-2 lg:text-sm lg:mb-1">Bank Name</label>
+            <label className="block text-base text-secondary mb-2 lg:text-sm lg:mb-1">Bank Name</label>
             <select
               value={bankName}
               onChange={(e) => setBankName(e.target.value)}
@@ -134,7 +134,7 @@ export default function BankTransferForm() {
           </div>
           
           <div>
-            <label className="block text-body text-secondary mb-2 lg:text-sm lg:mb-1">Account Number</label>
+            <label className="block text-base text-secondary mb-2 lg:text-sm lg:mb-1">Account Number</label>
             <input
               type="text"
               value={accountNumber}
@@ -151,7 +151,7 @@ export default function BankTransferForm() {
               {isVerifying && (
                 <div className="flex items-center text-secondary">
                   <div className="w-4 h-4 border-2 border-secondary border-t-accent rounded-full animate-spin mr-2"></div>
-                  <span className="text-caption">Verifying account...</span>
+                  <span className="text-sm">Verifying account...</span>
                 </div>
               )}
               {verified && accountName && (
@@ -159,14 +159,14 @@ export default function BankTransferForm() {
                   <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
-                  <span className="text-body font-semibold">{accountName}</span>
+                  <span className="text-base font-semibold">{accountName}</span>
                 </div>
               )}
             </div>
           </div>
           
           {amount && (
-            <div className="text-caption text-secondary">
+            <div className="text-sm text-secondary">
               Cost: ~{usdcCost} USDC
             </div>
           )}

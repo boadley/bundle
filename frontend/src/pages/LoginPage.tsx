@@ -26,7 +26,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-primary flex flex-col items-center justify-center p-4 text-white">
       <BundleLogo />
-      <h2 className="text-headline text-white mb-12 text-center max-w-md">
+      <h2 className="text-2xl font-bold text-white mb-12 text-center max-w-md">
         Spend Crypto on <span className="text-accent">Anything</span> in <span className="text-accent">Nigeria</span>
       </h2>
       <div className="w-full max-w-sm">

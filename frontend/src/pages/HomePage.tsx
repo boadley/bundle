@@ -32,7 +32,7 @@ export default function HomePage() {
       <div className="block lg:hidden">
         {activeForm === 'none' ? (
           <main className="p-4">
-            <h1 className="text-headline text-white mb-6 text-left">Welcome back!</h1>
+            <h1 className="text-2xl font-bold text-white mb-6 text-left">Welcome back!</h1>
             <BalanceCard />
             <QuickActions 
               onAirtimeClick={handleAirtimeClick}

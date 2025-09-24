@@ -26,10 +26,10 @@ export default function BalanceCard() {
   
   return (
     <div className="balance-card mb-8">
-      <div className="text-caption text-secondary mb-2">
+      <div className="text-sm text-secondary mb-2">
         {displayAccountId}
       </div>
-      <div className="text-display text-white mb-1">
+      <div className="text-4xl font-bold text-white mb-1">
         {isLoading ? (
           <div className="flex items-center">
             <div className="w-6 h-6 border-2 border-secondary border-t-accent rounded-full animate-spin mr-2"></div>
@@ -41,10 +41,10 @@ export default function BalanceCard() {
           '$0.00'
         )}
       </div>
-      <div className="text-body text-secondary flex items-center justify-center gap-2">
+      <div className="text-base text-secondary flex items-center justify-center gap-2">
         <span>HBAR</span>
         {isConnected && balance && (
-          <span className="text-caption">
+          <span className="text-sm">
             ({parseFloat(balance.formatted).toFixed(4)} HBAR)
           </span>
         )}

@@ -63,7 +63,7 @@ function TransactionIcon({ type }: { type: Transaction['type'] }) {
 export default function RecentTransactions() {
   return (
     <div className="mb-8">
-      <h3 className="text-subheadline text-white mb-4">Recent Transactions</h3>
+      <h3 className="text-lg font-semibold text-white mb-4">Recent Transactions</h3>
       <div className="card">
         {mockTransactions.map((transaction) => (
           <div key={transaction.id} className="transaction-item">
@@ -72,13 +72,13 @@ export default function RecentTransactions() {
                 <TransactionIcon type={transaction.type} />
               </div>
               <div>
-                <div className="text-body text-white">{transaction.description}</div>
-                <div className="text-caption text-secondary">{transaction.recipient}</div>
+                <div className="text-base text-white">{transaction.description}</div>
+                <div className="text-sm text-secondary">{transaction.recipient}</div>
               </div>
             </div>
             <div className="text-right">
-              <div className="text-body text-white">{transaction.amount}</div>
-              <div className="text-caption text-secondary">{transaction.timestamp}</div>
+              <div className="text-base text-white">{transaction.amount}</div>
+              <div className="text-sm text-secondary">{transaction.timestamp}</div>
             </div>
           </div>
         ))}

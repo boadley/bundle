@@ -17,7 +17,7 @@ function QuickAction({ icon, label, onClick, disabled = false }: QuickActionProp
       <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center mb-2">
         {icon}
       </div>
-      <span className="text-caption text-white">{label}</span>
+      <span className="text-sm text-white">{label}</span>
     </button>
   );
 }

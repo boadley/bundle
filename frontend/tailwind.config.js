@@ -18,17 +18,10 @@ export default { // Changed from module.exports
         sans: ['Inter', 'sans-serif'],
       },
       fontSize: {
-        'display': ['32px', { lineHeight: '1.2', fontWeight: '700' }],  // H1
-        'headline': ['24px', { lineHeight: '1.3', fontWeight: '700' }], // H2
-        'subheadline': ['18px', { lineHeight: '1.4', fontWeight: '600' }], // H3
-        'body': ['16px', { lineHeight: '1.5', fontWeight: '400' }],     // Body
-        'button': ['16px', { lineHeight: '1.5', fontWeight: '700' }],   // Button
-        'caption': ['14px', { lineHeight: '1.4', fontWeight: '400' }], // Caption
-      },
-      borderRadius: {
-        'card': '16px',
-        'input': '8px',
-        'button': '12px',
+        'display': ['32px', { lineHeight: '1.2' }],  // H1
+        'headline': ['24px', { lineHeight: '1.3' }], // H2
+        'subheadline': ['18px', { lineHeight: '1.4' }], // H3
+        'caption': ['14px', { lineHeight: '1.4' }], // Caption
       },
       spacing: {
         '18': '4.5rem',

@@ -25,12 +25,12 @@ export default function SuccessScreen({
       </div>
       
       {/* Success title */}
-      <h1 className="text-display text-white mb-4 text-center">
+      <h1 className="text-4xl font-bold text-white mb-4 text-center">
         {title}
       </h1>
       
       {/* Success message */}
-      <p className="text-body text-white text-center mb-12 max-w-md">
+      <p className="text-base text-white text-center mb-12 max-w-md">
         {message}
       </p>
       
