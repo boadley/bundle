@@ -6,6 +6,51 @@ import { toast } from 'react-hot-toast';
 
 const banks = ['GTBank', 'Zenith Bank', 'Access Bank', 'UBA'];
 
+interface ConfirmationModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  amount: string;
+  accountName: string;
+  isLoading: boolean;
+}
+
+function ConfirmationModal({ isOpen, onClose, onConfirm, amount, accountName, isLoading }: ConfirmationModalProps) {
+  if (!isOpen) return null;
+
+  const usdcCost = (parseFloat(amount) * 0.00085).toFixed(2); // Mock conversion rate
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <h3 className="text-subheadline text-white mb-4">Confirm Transfer</h3>
+        <p className="text-body text-white mb-4">
+          You are sending ₦{amount} to {accountName}.
+        </p>
+        <p className="text-body text-white mb-6">
+          Total Cost: ~{usdcCost} USDC
+        </p>
+        <div className="flex gap-3">
+          <button
+            onClick={onClose}
+            className="flex-1 py-3 px-4 border border-disabled text-secondary rounded-button font-button"
+            disabled={isLoading}
+          >
+            Cancel
+          </button>
+          <button
+            onClick={onConfirm}
+            className="flex-1 btn-primary"
+            disabled={isLoading}
+          >
+            {isLoading ? 'Processing...' : 'Confirm & Pay'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function BankTransferForm() {
   const [amount, setAmount] = useState('');
   const [bankName, setBankName] = useState('');
@@ -13,23 +58,29 @@ export default function BankTransferForm() {
   const [accountName, setAccountName] = useState('');
   const [isVerifying, setIsVerifying] = useState(false);
   const [verified, setVerified] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const { executePayment, isLoading } = useBundle();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (amount && bankName && accountNumber && accountName) {
-      executePayment('bank', {
-        amount: parseFloat(amount),
-        bankName,
-        accountNumber,
-        accountName,
-      });
+      setShowConfirmation(true);
     }
   };
 
+  const handleConfirm = () => {
+    executePayment('bank', {
+      amount: parseFloat(amount),
+      bankName,
+      accountNumber,
+      accountName,
+    });
+    setShowConfirmation(false);
+  };
+
   const handleVerifyAccount = async () => {
-    if (bankName && accountNumber) {
+    if (bankName && accountNumber && accountNumber.length === 10) {
       setIsVerifying(true);
       setVerified(false);
       setAccountName('');
@@ -40,6 +91,7 @@ export default function BankTransferForm() {
         toast.success('Account verified successfully');
       } catch (error) {
         setAccountName('');
+        setVerified(false);
         toast.error('Account verification failed');
       } finally {
         setIsVerifying(false);
@@ -47,65 +99,96 @@ export default function BankTransferForm() {
     }
   };
 
+  const usdcCost = amount ? (parseFloat(amount) * 0.00085).toFixed(2) : '0.00';
+
   return (
-    <div className="bg-surface rounded-xl p-6">
-      <h3 className="text-xl font-semibold mb-4 text-white">Bank Transfer</h3>
-      <form className="space-y-4" onSubmit={handleSubmit}>
-        <div>
-          <label className="block text-sm font-medium text-secondary mb-1">Amount (NGN)</label>
-          <input
-            type="number"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            placeholder="Enter amount"
-            className="w-full px-3 py-2 bg-primary/50 border border-secondary rounded-md text-white placeholder-secondary focus:border-accent focus:outline-none"
-            required
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-secondary mb-1">Bank Name</label>
-          <select
-            value={bankName}
-            onChange={(e) => setBankName(e.target.value)}
-            className="w-full px-3 py-2 bg-primary/50 border border-secondary rounded-md text-white focus:border-accent focus:outline-none"
-            required
-          >
-            <option value="">Select bank</option>
-            {banks.map((bank) => (
-              <option key={bank} value={bank}>{bank}</option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-secondary mb-1">Account Number</label>
-          <div className="flex">
+    <>
+      <div className="lg:bg-surface lg:rounded-xl lg:p-6">
+        <h2 className="text-headline text-white mb-6 lg:text-xl lg:mb-4">Bank Transfer</h2>
+        <form className="space-y-6 lg:space-y-4" onSubmit={handleSubmit}>
+          <div>
+            <label className="block text-body text-secondary mb-2 lg:text-sm lg:mb-1">Amount (NGN)</label>
+            <input
+              type="number"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              placeholder="Enter amount"
+              className="input-field lg:px-3 lg:py-2 lg:text-sm"
+              required
+            />
+          </div>
+          
+          <div>
+            <label className="block text-body text-secondary mb-2 lg:text-sm lg:mb-1">Bank Name</label>
+            <select
+              value={bankName}
+              onChange={(e) => setBankName(e.target.value)}
+              className="input-field lg:px-3 lg:py-2 lg:text-sm"
+              required
+            >
+              <option value="">Select bank</option>
+              {banks.map((bank) => (
+                <option key={bank} value={bank}>{bank}</option>
+              ))}
+            </select>
+          </div>
+          
+          <div>
+            <label className="block text-body text-secondary mb-2 lg:text-sm lg:mb-1">Account Number</label>
             <input
               type="text"
               value={accountNumber}
               onChange={(e) => setAccountNumber(e.target.value)}
               onBlur={handleVerifyAccount}
               placeholder="Enter account number"
-              className="flex-1 px-3 py-2 bg-primary/50 border border-secondary rounded-l-md text-white placeholder-secondary focus:border-accent focus:outline-none"
+              className="input-field lg:px-3 lg:py-2 lg:text-sm"
               required
               maxLength={10}
             />
-            {isVerifying && <div className="bg-primary border border-secondary rounded-r-md p-2">
-              <div className="w-4 h-4 border-2 border-secondary border-t-accent rounded-full animate-spin"></div>
-            </div>}
-            {verified && accountName && <div className="bg-primary border border-secondary rounded-r-md p-2 flex items-center gap-1">
-              <div className="w-4 h-4 text-success">✓</div>
-              <span className="text-success font-medium">{accountName}</span>
-            </div>}
+            
+            {/* Account verification status */}
+            <div className="mt-2 min-h-[24px] flex items-center">
+              {isVerifying && (
+                <div className="flex items-center text-secondary">
+                  <div className="w-4 h-4 border-2 border-secondary border-t-accent rounded-full animate-spin mr-2"></div>
+                  <span className="text-caption">Verifying account...</span>
+                </div>
+              )}
+              {verified && accountName && (
+                <div className="flex items-center text-success">
+                  <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                  <span className="text-body font-semibold">{accountName}</span>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-        <Button 
-          type="submit" 
-          disabled={!amount || !bankName || !accountNumber || !verified || isLoading} 
-          isLoading={isLoading}
-        >
-          Proceed
-        </Button>
-      </form>
-    </div>
+          
+          {amount && (
+            <div className="text-caption text-secondary">
+              Cost: ~{usdcCost} USDC
+            </div>
+          )}
+          
+          <Button 
+            type="submit" 
+            disabled={!amount || !bankName || !accountNumber || !verified || isLoading} 
+            isLoading={isLoading}
+          >
+            Proceed
+          </Button>
+        </form>
+      </div>
+
+      <ConfirmationModal
+        isOpen={showConfirmation}
+        onClose={() => setShowConfirmation(false)}
+        onConfirm={handleConfirm}
+        amount={amount}
+        accountName={accountName}
+        isLoading={isLoading}
+      />
+    </>
   );
 }

@@ -1,11 +1,12 @@
 import React from 'react';
 
-interface ButtonProps {
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
   onClick?: () => void;
   disabled?: boolean;
   isLoading?: boolean;
   className?: string;
+  variant?: 'primary' | 'secondary';
 }
 
 export default function Button({ 
@@ -13,18 +14,23 @@ export default function Button({
   onClick, 
   disabled = false, 
   isLoading = false, 
-  className = '' 
+  className = '',
+  variant = 'primary',
+  ...props
 }: ButtonProps) {
+  const baseClasses = "w-full flex items-center justify-center gap-2 transition-colors duration-200";
+  
+  const variantClasses = {
+    primary: "btn-primary",
+    secondary: "btn-secondary"
+  };
+
   return (
     <button
-      className={`
-        w-full py-3 px-6 rounded-lg font-semibold text-lg transition-colors
-        ${isLoading || disabled ? 'bg-disabled cursor-not-allowed' : 'bg-accent hover:bg-accent/90'}
-        ${isLoading || disabled ? 'text-white/50' : 'text-white'}
-        flex items-center justify-center gap-2 ${className}
-      `}
+      className={`${baseClasses} ${variantClasses[variant]} ${className}`}
       onClick={onClick}
       disabled={disabled || isLoading}
+      {...props}
     >
       {isLoading && (
         <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>

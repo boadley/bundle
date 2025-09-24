@@ -4,18 +4,35 @@ export default { // Changed from module.exports
   theme: {
     extend: {
       colors: {
-        primary: {
-          900: '#0D1B2A',
-        },
-        accent: '#00F5D4',
-        secondary: '#A9B4C2',
-        success: '#2ECC71',
-        error: '#E74C3C',
-        disabled: '#5A6470',
-        surface: '#1F2A37',
+        // Design spec colors
+        primary: '#0D1B2A',        // Deep blue background
+        surface: '#1F2A37',        // Card backgrounds
+        accent: '#00F5D4',         // Mint green CTA
+        secondary: '#A9B4C2',      // Light grey secondary text
+        disabled: '#5A6470',       // Disabled state
+        success: '#2ECC71',        // Success green
+        error: '#E74C3C',          // Error red
+        white: '#FFFFFF',          // Pure white
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
+      },
+      fontSize: {
+        'display': ['32px', { lineHeight: '1.2', fontWeight: '700' }],  // H1
+        'headline': ['24px', { lineHeight: '1.3', fontWeight: '700' }], // H2
+        'subheadline': ['18px', { lineHeight: '1.4', fontWeight: '600' }], // H3
+        'body': ['16px', { lineHeight: '1.5', fontWeight: '400' }],     // Body
+        'button': ['16px', { lineHeight: '1.5', fontWeight: '700' }],   // Button
+        'caption': ['14px', { lineHeight: '1.4', fontWeight: '400' }], // Caption
+      },
+      borderRadius: {
+        'card': '16px',
+        'input': '8px',
+        'button': '12px',
+      },
+      spacing: {
+        '18': '4.5rem',
+        '22': '5.5rem',
       },
     },
   },

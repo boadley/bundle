@@ -7,3 +7,72 @@
 body {
   font-family: 'Inter', sans-serif;
 }
+
+/* Mobile-first component styles following design spec */
+@layer components {
+  /* Button Components */
+  .btn-primary {
+    @apply w-full bg-accent text-white font-button py-4 px-6 rounded-button transition-colors duration-200;
+  }
+  
+  .btn-primary:hover {
+    @apply bg-accent/90;
+  }
+  
+  .btn-primary:disabled {
+    @apply bg-disabled cursor-not-allowed;
+  }
+  
+  .btn-secondary {
+    @apply text-accent font-button py-2 px-4 transition-colors duration-200;
+  }
+  
+  .btn-secondary:hover {
+    @apply text-accent/80;
+  }
+  
+  /* Input Components */
+  .input-field {
+    @apply w-full bg-transparent border border-disabled text-white placeholder-secondary py-4 px-4 rounded-input text-body transition-colors duration-200;
+  }
+  
+  .input-field:focus {
+    @apply border-accent outline-none;
+  }
+  
+  /* Card Components */
+  .card {
+    @apply bg-surface rounded-card p-6;
+  }
+  
+  .balance-card {
+    @apply card p-8 text-center;
+  }
+  
+  /* Quick Action Items */
+  .quick-action {
+    @apply flex flex-col items-center justify-center p-4 rounded-input transition-colors duration-200 cursor-pointer;
+  }
+  
+  .quick-action:hover {
+    @apply bg-surface/50;
+  }
+  
+  .quick-action:active {
+    @apply bg-surface;
+  }
+  
+  /* Transaction List Items */
+  .transaction-item {
+    @apply flex items-center justify-between py-4 border-b border-disabled/20 last:border-b-0;
+  }
+  
+  /* Modal Overlay */
+  .modal-overlay {
+    @apply fixed inset-0 bg-primary/80 backdrop-blur-sm z-50 flex items-center justify-center p-4;
+  }
+  
+  .modal-content {
+    @apply card w-full max-w-md;
+  }
+}
