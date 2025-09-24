@@ -2,8 +2,23 @@ import React, { useState } from 'react';
 import Button from './Button';
 import { useBundle } from '../hooks/useBundle';
 
-const networks = ['MTN', 'Glo', 'Airtel', '9mobile'];
-const commonAmounts = [500, 1000, 2000, 5000];
+// Network data with colors for visual representation
+const networks = [
+  { name: 'MTN', code: 'MTN', color: '#FFCC00', textColor: '#000' },
+  { name: 'Glo', code: 'Glo', color: '#00A651', textColor: '#fff' },
+  { name: 'Airtel', code: 'Airtel', color: '#FF0000', textColor: '#fff' },
+  { name: '9mobile', code: '9mobile', color: '#00A86B', textColor: '#fff' }
+];
+
+// Preset amounts with cashback
+const presetAmounts = [
+  { amount: 50, cashback: 2 },
+  { amount: 100, cashback: 5 },
+  { amount: 200, cashback: 10 },
+  { amount: 500, cashback: 25 },
+  { amount: 1000, cashback: 50 },
+  { amount: 2000, cashback: 100 }
+];
 
 interface ConfirmationModalProps {
   isOpen: boolean;
@@ -11,23 +26,24 @@ interface ConfirmationModalProps {
   onConfirm: () => void;
   phoneNumber: string;
   amount: string;
+  network: string;
   isLoading: boolean;
 }
 
-function ConfirmationModal({ isOpen, onClose, onConfirm, phoneNumber, amount, isLoading }: ConfirmationModalProps) {
+function ConfirmationModal({ isOpen, onClose, onConfirm, phoneNumber, amount, network, isLoading }: ConfirmationModalProps) {
   if (!isOpen) return null;
 
-  const usdcCost = (parseFloat(amount)); // Mock conversion rate
+  const hbarCost = (parseFloat(amount) * 0.00085).toFixed(4); // Mock conversion rate
 
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <h3 className="text-lg font-semibold text-white mb-4">Confirm Purchase</h3>
         <p className="text-base text-white mb-4">
-          You are sending ₦{amount} Airtime to {phoneNumber}.
+          You are sending ₦{amount} {network} Airtime to {phoneNumber}.
         </p>
         <p className="text-base text-white mb-6">
-          Total Cost: ~{usdcCost} NGN
+          Total Cost: ~{hbarCost} HBAR
         </p>
         <div className="flex gap-3">
           <button
@@ -52,7 +68,7 @@ function ConfirmationModal({ isOpen, onClose, onConfirm, phoneNumber, amount, is
 
 export default function AirtimeForm() {
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [network, setNetwork] = useState('');
+  const [selectedNetwork, setSelectedNetwork] = useState<typeof networks[0] | null>(null);
   const [amount, setAmount] = useState('');
   const [showConfirmation, setShowConfirmation] = useState(false);
 
@@ -60,91 +76,118 @@ export default function AirtimeForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (phoneNumber && network && amount) {
+    if (phoneNumber && selectedNetwork && amount) {
       setShowConfirmation(true);
     }
   };
 
   const handleConfirm = () => {
-    executePayment('airtime', {
-      phoneNumber,
-      network,
-      amount: parseFloat(amount),
-    });
-    setShowConfirmation(false);
+    if (selectedNetwork) {
+      executePayment('airtime', {
+        phoneNumber,
+        network: selectedNetwork.code,
+        amount: parseFloat(amount),
+      });
+      setShowConfirmation(false);
+    }
   };
 
-  const handleQuickAmount = (quickAmount: number) => {
-    setAmount(quickAmount.toString());
+  const handlePresetAmount = (presetAmount: number) => {
+    setAmount(presetAmount.toString());
   };
 
-  const usdcCost = amount ? (parseFloat(amount)) : '0.00';
+  const hbarCost = amount ? (parseFloat(amount) * 0.00085).toFixed(4) : '0.0000';
 
   return (
     <>
       <div className="lg:bg-surface lg:rounded-xl lg:p-6">
         <h2 className="text-2xl font-bold text-white mb-6 lg:text-xl lg:mb-4">Buy Airtime</h2>
+        
         <form className="space-y-6 lg:space-y-4" onSubmit={handleSubmit}>
+          {/* Phone Number Input with Network Selection */}
           <div>
-            <label className="block text-base text-secondary mb-2 lg:text-sm lg:mb-1">Phone Number</label>
+            <label className="block text-base text-secondary mb-3">Phone Number</label>
+            
+            {/* Network Carousel */}
+            <div className="flex space-x-2 mb-3">
+              {networks.map((network) => (
+                <button
+                  key={network.code}
+                  type="button"
+                  onClick={() => setSelectedNetwork(network)}
+                  className={`w-12 h-12 rounded-lg flex items-center justify-center text-xs font-bold transition-all duration-200 ${
+                    selectedNetwork?.code === network.code
+                      ? 'ring-2 ring-accent scale-105'
+                      : 'opacity-70 hover:opacity-100'
+                  }`}
+                  style={{ 
+                    backgroundColor: network.color, 
+                    color: network.textColor 
+                  }}
+                >
+                  {network.name === '9mobile' ? '9M' : network.name.slice(0, 3)}
+                </button>
+              ))}
+            </div>
+            
+            {/* Phone Number Input */}
             <input
               type="tel"
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
               placeholder="Enter phone number"
-              className="input-field lg:px-3 lg:py-2 lg:text-sm"
+              className="input-field"
               required
             />
           </div>
-          
+
+          {/* Top-Up Amount Selection */}
           <div>
-            <label className="block text-base text-secondary mb-2 lg:text-sm lg:mb-1">Network</label>
-            <select
-              value={network}
-              onChange={(e) => setNetwork(e.target.value)}
-              className="input-field lg:px-3 lg:py-2 lg:text-sm"
-              required
-            >
-              <option value="">Select network</option>
-              {networks.map((net) => (
-                <option key={net} value={net}>{net}</option>
+            <label className="block text-base text-secondary mb-3">Top-Up Amount</label>
+            <div className="grid grid-cols-3 gap-3 mb-4">
+              {presetAmounts.map((preset) => (
+                <button
+                  key={preset.amount}
+                  type="button"
+                  onClick={() => handlePresetAmount(preset.amount)}
+                  className={`p-3 rounded-lg border transition-all duration-200 ${
+                    amount === preset.amount.toString()
+                      ? 'border-accent bg-accent/10 text-accent'
+                      : 'border-disabled bg-surface text-white hover:border-accent/50'
+                  }`}
+                >
+                  <div className="text-sm font-bold">₦{preset.amount}</div>
+                  <div className="text-xs text-success">+₦{preset.cashback} cashback</div>
+                </button>
               ))}
-            </select>
+            </div>
           </div>
-          
+
+          {/* Manual Amount Input */}
           <div>
-            <label className="block text-base text-secondary mb-2 lg:text-sm lg:mb-1">Amount (NGN)</label>
+            <label className="block text-base text-secondary mb-2">Custom Amount</label>
             <input
               type="number"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              placeholder="Enter amount"
-              className="input-field lg:px-3 lg:py-2 lg:text-sm"
-              required
+              placeholder="₦ 50-500,000"
+              className="input-field"
+              min="50"
+              max="500000"
             />
           </div>
-          
-          <div className="flex gap-3 flex-wrap lg:gap-2">
-            {commonAmounts.map((amt) => (
-              <button
-                key={amt}
-                type="button"
-                onClick={() => handleQuickAmount(amt)}
-                className="px-4 py-2 bg-accent/20 text-accent rounded-lg text-base font-medium hover:bg-accent/30 lg:px-3 lg:py-1 lg:text-sm"
-              >
-                ₦{amt}
-              </button>
-            ))}
-          </div>
-          
+
           {amount && (
             <div className="text-sm text-secondary">
-              Cost: ~{usdcCost} NGN
+              Cost: ~{hbarCost} HBAR
             </div>
           )}
-          
-          <Button disabled={!phoneNumber || !network || !amount || isLoading} isLoading={isLoading}>
-            Proceed
+
+          <Button 
+            disabled={!phoneNumber || !selectedNetwork || !amount || isLoading} 
+            isLoading={isLoading}
+          >
+            Pay
           </Button>
         </form>
       </div>
@@ -155,6 +198,7 @@ export default function AirtimeForm() {
         onConfirm={handleConfirm}
         phoneNumber={phoneNumber}
         amount={amount}
+        network={selectedNetwork?.name || ''}
         isLoading={isLoading}
       />
     </>
