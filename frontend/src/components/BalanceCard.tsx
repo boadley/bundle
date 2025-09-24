@@ -14,13 +14,13 @@ export default function BalanceCard() {
   });
   
   // Mock account ID for display (in real app, you'd fetch this from Hedera)
-  const mockAccountId = "0.0.123456";
+  const mockAccountId = "0.0.6886568";
   
   // Format address to show account ID style
   const displayAccountId = address ? mockAccountId : "Not connected";
   
   // Convert HBAR to USD equivalent (mock rate: 1 HBAR = $0.15)
-  const hbarToUsd = 0.15;
+  const hbarToUsd = 332.239;
   const balanceInHbar = balance ? parseFloat(balance.formatted) : 0;
   const balanceInUsd = (balanceInHbar * hbarToUsd).toFixed(2);
   
@@ -36,9 +36,9 @@ export default function BalanceCard() {
             Loading...
           </div>
         ) : isConnected ? (
-          `$${balanceInUsd}`
+          `₦${balanceInUsd}`
         ) : (
-          '$0.00'
+          '₦0.00'
         )}
       </div>
       <div className="text-base text-secondary flex items-center justify-center gap-2">

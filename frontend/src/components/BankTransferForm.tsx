@@ -18,7 +18,7 @@ interface ConfirmationModalProps {
 function ConfirmationModal({ isOpen, onClose, onConfirm, amount, accountName, isLoading }: ConfirmationModalProps) {
   if (!isOpen) return null;
 
-  const usdcCost = (parseFloat(amount) * 0.00085).toFixed(2); // Mock conversion rate
+  const usdcCost = (parseFloat(amount)); // Mock conversion rate
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -28,7 +28,7 @@ function ConfirmationModal({ isOpen, onClose, onConfirm, amount, accountName, is
           You are sending ₦{amount} to {accountName}.
         </p>
         <p className="text-base text-white mb-6">
-          Total Cost: ~{usdcCost} USDC
+          Total Cost: ~{usdcCost} NGN
         </p>
         <div className="flex gap-3">
           <button
@@ -99,7 +99,7 @@ export default function BankTransferForm() {
     }
   };
 
-  const usdcCost = amount ? (parseFloat(amount) * 0.00085).toFixed(2) : '0.00';
+  const usdcCost = amount ? (parseFloat(amount)) : '0.00';
 
   return (
     <>
@@ -167,7 +167,7 @@ export default function BankTransferForm() {
           
           {amount && (
             <div className="text-sm text-secondary">
-              Cost: ~{usdcCost} USDC
+              Cost: ~{usdcCost} NGN
             </div>
           )}
           
