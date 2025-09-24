@@ -9,7 +9,8 @@
 	"build": {
         "context": ".",
         "dockerfile": "Dockerfile"
-    }
+    },
+    "forwardPorts": [3000, 5173]
 	// Features add additional features to your environment. See https://containers.dev/features
 	// Beware: features are not supported on all platforms and may have unintended side-effects.
 	// "features": {
@@ -18,3 +19,21 @@
     //   }
     // }
 }
+// {
+// 	"name": "bundle",
+// 	"image": "mcr.microsoft.com/devcontainers/javascript-node",
+// 	"features": {
+// 		"ghcr.io/devcontainers/features/node:1": {
+// 			"version": "lts"
+// 		}
+// 	},
+// 	"customizations": {
+// 		"vscode": {
+// 			"extensions": ["dbaeumer.vscode-eslint", "esbenp.prettier-vscode"],
+// 			"settings": {
+// 				"editor.formatOnSave": true
+// 			}
+// 		}
+// 	},
+// 	"forwardPorts": [3000, 5173]
+// }
