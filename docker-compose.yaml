@@ -14,18 +14,18 @@ services:
       - VITE_APP_DESCRIPTION=${VITE_APP_DESCRIPTION}
       - VITE_APP_ICON=${VITE_APP_ICON}
       - VITE_APP_URL=${VITE_APP_URL}
-      - VITE_API_URL=${VITE_API_URL}
+      - VITE_API_URL=/api
     depends_on:
       - backend
     networks:
       - bundle-network
+    volumes:
+      - ./ssl:/etc/nginx/ssl:ro  # Mount SSL certificates
 
   backend:
     build:
       context: .
       dockerfile: Dockerfile.backend
-    ports:
-      - "3031:3000"
     environment:
       - PAYSTACK_SECRET_KEY=${PAYSTACK_SECRET_KEY}
       - TREASURY_ADDRESS=${TREASURY_ADDRESS}
