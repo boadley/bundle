@@ -19,8 +19,6 @@ services:
       - backend
     networks:
       - bundle-network
-    volumes:
-      - ./ssl:/etc/nginx/ssl:ro  # Mount SSL certificates
 
   backend:
     build:
