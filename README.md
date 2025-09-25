@@ -1,4 +1,4 @@
-# Bundle Codebase Analysis
+# Bundle
 
 ## Overview
 Bundle is a hybrid payment system that integrates Hedera blockchain with traditional payment methods, allowing users to spend cryptocurrency on everyday services in Nigeria. The application follows a modern full-stack architecture with a React frontend and Node.js backend.
@@ -91,9 +91,12 @@ TREASURY_ADDRESS=your_hedera_treasury_address
 # Frontend (VITE_ prefix required)
 VITE_PROJECT_ID=your_appkit_project_id
 VITE_TREASURY_ADDRESS=your_treasury_address
+VITE_API_URL=http://localhost:3000/api # For local development
 
 # Backend
-PAYSTACK_SECRET_KEY=your_paystack_secret_key
+PAYSTACK_SECRET_KEY=your_paystack_secret_key_here
+FRONTEND_URL=http://localhost:5173  # For local development
+
 ```
 
 ### Optional Environment Variables:

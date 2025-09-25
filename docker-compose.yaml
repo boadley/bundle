@@ -13,6 +13,8 @@ services:
       - VITE_APP_NAME=${VITE_APP_NAME:-Bundle}
       - VITE_APP_DESCRIPTION=${VITE_APP_DESCRIPTION}
       - VITE_APP_ICON=${VITE_APP_ICON}
+      - VITE_APP_URL=${VITE_APP_URL}
+      - VITE_API_URL=${VITE_API_URL}
     depends_on:
       - backend
     networks:
