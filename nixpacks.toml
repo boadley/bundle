@@ -1,0 +1,95 @@
+# nixpacks.toml
+
+# Specify the providers (languages/tools) needed.
+# We need Node.js for building, and Nginx for serving.
+providers = ["nodejs", "nginx"]
+
+# Define build-time environment variables.
+# The VITE_API_URL should be a relative path because Nginx will handle the proxy.
+[variables]
+VITE_API_URL = "/api"
+# Other VITE_ variables like VITE_PROJECT_ID will be injected by Coolify secrets.
+
+[phases.setup]
+# Install supervisord, a process manager to run both Nginx and our Node.js app.
+# The 'aptPkgs' key lets us install system-level Debian packages.
+aptPkgs = ["supervisor"]
+
+[phases.install]
+# Install npm dependencies for both the backend and frontend.
+# The '&&' ensures that the second command runs only if the first succeeds.
+cmds = [
+  "cd backend && npm install",
+  "cd ../frontend && npm install"
+]
+
+[phases.build]
+# This phase prepares the application for production.
+cmds = [
+  # 1. Create the Nginx configuration file on the fly.
+  #    This config tells Nginx to listen on port 8080, serve static files from
+  #    the frontend's 'dist' directory, and proxy '/api' requests to the backend.
+  """
+  echo "
+  server {
+    listen 8080;
+    server_name localhost;
+
+    # Serve the static frontend files
+    location / {
+      root /app/frontend/dist;
+      index index.html;
+      try_files \$uri \$uri/ /index.html;
+    }
+
+    # Proxy API requests to the Node.js backend running on port 3000
+    location /api {
+      proxy_pass http://127.0.0.1:3000;
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade \$http_upgrade;
+      proxy_set_header Connection 'upgrade';
+      proxy_set_header Host \$host;
+      proxy_cache_bypass \$http_upgrade;
+    }
+  }
+  " > /etc/nginx/sites-available/default
+  """,
+
+  # 2. Create the supervisord configuration file.
+  #    This tells supervisord how to start and manage both processes.
+  """
+  echo "
+  [supervisord]
+  nodaemon=true
+
+  [program:backend]
+  command=node /app/backend/src/app.js
+  directory=/app/backend
+  autostart=true
+  autorestart=true
+  stderr_logfile=/dev/stderr
+  stderr_logfile_maxbytes=0
+  stdout_logfile=/dev/stdout
+  stdout_logfile_maxbytes=0
+
+  [program:nginx]
+  command=/usr/sbin/nginx -g 'daemon off;'
+  autostart=true
+  autorestart=true
+  stderr_logfile=/dev/stderr
+  stderr_logfile_maxbytes=0
+  stdout_logfile=/dev/stdout
+  stdout_logfile_maxbytes=0
+  " > /etc/supervisor/conf.d/supervisord.conf
+  """,
+
+  # 3. Build the frontend application using Vite.
+  #    This creates the static files in the 'frontend/dist' directory.
+  "cd frontend && npm run build"
+]
+
+[start]
+# The command to start the application.
+# We use supervisord to launch and monitor both our backend and Nginx.
+# Coolify will expose the port that Nginx is listening on (8080).
+cmd = "supervisord -c /etc/supervisor/conf.d/supervisord.conf"
