@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile.frontend
     ports:
-      - "3715:80"
+      - "5713:80"
     environment:
       - VITE_PROJECT_ID=${VITE_PROJECT_ID}
       - VITE_TREASURY_ADDRESS=${VITE_TREASURY_ADDRESS}
@@ -25,7 +25,7 @@ services:
       context: .
       dockerfile: Dockerfile.backend
     ports:
-      - "5173:5173"
+      - "3031:3000"
     environment:
       - PAYSTACK_SECRET_KEY=${PAYSTACK_SECRET_KEY}
       - TREASURY_ADDRESS=${TREASURY_ADDRESS}
