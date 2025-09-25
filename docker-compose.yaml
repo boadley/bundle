@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile.frontend
     ports:
-      - "80:80"
+      - "3715:80"
     environment:
       - VITE_PROJECT_ID=${VITE_PROJECT_ID}
       - VITE_TREASURY_ADDRESS=${VITE_TREASURY_ADDRESS}
