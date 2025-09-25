@@ -25,7 +25,7 @@ services:
       context: .
       dockerfile: Dockerfile.backend
     ports:
-      - "5000:5000"
+      - "5173:5173"
     environment:
       - PAYSTACK_SECRET_KEY=${PAYSTACK_SECRET_KEY}
       - TREASURY_ADDRESS=${TREASURY_ADDRESS}
