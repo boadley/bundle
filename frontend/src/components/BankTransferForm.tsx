@@ -286,7 +286,7 @@ export default function BankTransferForm() {
         title="Confirm Bank Transfer"
         description={`You are sending ₦${amount} to ${accountName} at ${selectedBank?.name || ''}.`}
         amount={amount}
-        recipient={`${accountName} • ${selectedBank?.name || ''} • ${accountNumber}`}
+        recipient={`${accountName} • ${accountNumber}`}
         transactionType="bank"
         isLoading={isLoading}
       />

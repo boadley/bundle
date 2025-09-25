@@ -1,4 +1,3 @@
-
 import { IoPhonePortraitOutline, IoGiftOutline, IoCheckmarkCircle, IoBusiness } from 'react-icons/io5';
 
 interface Transaction {
@@ -73,12 +72,14 @@ function TransactionItem({ transaction }: { transaction: Transaction }) {
       </div>
       
       <div className="text-right">
-        <div className="flex items-center space-x-2">
-          <span className={`text-sm font-medium ${
-            transaction.amount.startsWith('+') ? 'text-success' : 'text-white'
-          }`}>
-            {transaction.amount}
-          </span>
+        <div className="flex items-center justify-end space-x-2">
+          <div className="w-20 text-right">
+            <span className={`text-sm font-medium ${
+              transaction.amount.startsWith('+') ? 'text-success' : 'text-white'
+            }`}>
+              {transaction.amount}
+            </span>
+          </div>
           {transaction.status === 'successful' && (
             <IoCheckmarkCircle className="w-4 h-4 text-success" />
           )}

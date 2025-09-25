@@ -114,7 +114,7 @@ export default function StatusPage() {
               {transactionId && (
                 <div className="flex justify-between items-center">
                   <span className="text-secondary">Transaction ID</span>
-                  <span className="text-white font-mono text-sm">{transactionId}</span>
+                  <span className="text-white font-mono text-sm">{transactionId.slice(0, 4)}....{transactionId.slice(-4)}</span>
                 </div>
               )}
               <div className="flex justify-between items-center">
