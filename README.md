@@ -158,23 +158,6 @@ This will automatically:
 - Set up environment file symlinks
 - Start both frontend and backend servers concurrently
 
-## Key Patterns & Conventions
-
-### State Management
-- **React Query**: Server state management and caching
-- **Wagmi Hooks**: Blockchain state and transaction management
-- **Custom Hooks**: `useBundle` encapsulates payment logic
-
-### Error Handling
-- **Toast Notifications**: User-friendly error messages
-- **Retry Logic**: Automatic retry for failed operations
-- **Validation**: Input validation on both frontend and backend
-
-### Code Organization
-- **Service Layer**: Clear separation between API calls and business logic
-- **Component Composition**: Reusable UI components with consistent styling
-- **Configuration Management**: Centralized config with environment validation
-
 ## Critical Developer Notes
 
 1. **Blockchain Network**: Uses Hedera Testnet (Chain ID 296) with custom RPC configuration
