@@ -1,32 +1,23 @@
-# Use official Node.js image for frontend build
-FROM node:18-alpine AS builder
+# This Dockerfile ONLY builds the frontend. It does not run a server.
+FROM node:20-alpine AS builder
 
-# Set working directory
 WORKDIR /app
-
-# Copy package.json and package-lock.json
 COPY frontend/package*.json ./
-
-# Install dependencies
 RUN npm install
 
-# Copy frontend source code
-COPY frontend/ .
+# Declare the build arguments that will be passed from docker-compose.
+ARG VITE_PROJECT_ID
+ARG VITE_TREASURY_ADDRESS
+ARG VITE_API_URL
 
-# Build the frontend
+# Set them as environment variables so the build process can use them.
+ENV VITE_PROJECT_ID=${VITE_PROJECT_ID}
+ENV VITE_TREASURY_ADDRESS=${VITE_TREASURY_ADDRESS}
+ENV VITE_API_URL=${VITE_API_URL}
+
+COPY frontend/ .
 RUN npm run build
 
-# Use Nginx to serve the built files
-FROM nginx:alpine
-
-# Copy the built files from the builder stage
-COPY --from=builder /app/dist /usr/share/nginx/html
-
-# Copy custom Nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Expose port for Nginx
-EXPOSE 80
-
-# Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# The final image is empty. The 'nginx-proxy' service will copy the
+# build artifacts from the '/app/dist' directory of this builder stage.
+FROM scratch

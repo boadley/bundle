@@ -1,5 +1,5 @@
 # Use official Node.js image for backend
-FROM node:18-alpine
+FROM node:20-alpine
 
 # Set working directory
 WORKDIR /app
@@ -14,7 +14,7 @@ RUN npm install
 COPY backend/ .
 
 # Expose port for backend
-EXPOSE 5000
+EXPOSE 3000
 
 # Start the backend server in production mode
 CMD ["npm", "start"]

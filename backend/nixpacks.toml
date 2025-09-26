@@ -1,5 +1,0 @@
-# backend/nixpacks.toml
-providers = ["node"]
-
-[start]
-cmd = "node src/app.js"

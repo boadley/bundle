@@ -1,8 +1,0 @@
-# frontend/nixpacks.toml
-providers = ["node"]
-
-[phases.build]
-cmds = ["npm run build"]
-
-[start]
-staticAssets = { "dist" = "/" }
