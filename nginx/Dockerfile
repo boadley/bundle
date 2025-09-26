@@ -27,7 +27,7 @@ RUN npm run build
 FROM nginx:alpine
 
 # Copy the universal nginx.conf file into the image.
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy the built static files from the 'builder' stage into the Nginx public directory.
 COPY --from=builder /app/dist /usr/share/nginx/html
