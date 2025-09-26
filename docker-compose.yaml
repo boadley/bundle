@@ -15,33 +15,20 @@ services:
       - bundle-network
     restart: unless-stopped
 
-  # This is the ONLY container exposed to the outside world.
-  # It serves the frontend files and proxies API calls to the backend.
   nginx-proxy:
-    build: ./nginx # <-- BUILDS FROM THE NEW NGINX DIRECTORY
-    restart: unless-stopped
-    ports:
-      # Exposes port 8080 on the host machine, forwarding to port 80 in the container.
-      - "8080:80"
-    # This is the key: it copies the built static files from the build-frontend service.
-    volumes:
-      - --from=build-frontend /app/dist /usr/share/nginx/html
-    depends_on:
-      - backend
-    networks:
-      - bundle-network
-
-  # This is a temporary service that ONLY exists to build the frontend.
-  # It does not run permanently.
-  build-frontend:
     build:
-      context: .
-      dockerfile: Dockerfile.frontend
-      # This is the CORRECT way to pass build-time variables to Vite.
+      context: . # <-- IMPORTANT: Build context is now the root directory
+      dockerfile: nginx/Dockerfile
+      # Pass the VITE variables as build arguments directly to the Nginx build
       args:
         - VITE_PROJECT_ID=${VITE_PROJECT_ID}
         - VITE_TREASURY_ADDRESS=${VITE_TREASURY_ADDRESS}
         - VITE_API_URL=/api
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
     networks:
       - bundle-network
 
