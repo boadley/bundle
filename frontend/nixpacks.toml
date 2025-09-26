@@ -1,5 +1,5 @@
 # frontend/nixpacks.toml
-providers = ["nodejs"]
+providers = ["node"]
 
 [phases.build]
 cmds = ["npm run build"]
