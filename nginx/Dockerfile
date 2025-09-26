@@ -12,11 +12,13 @@ RUN npm install
 ARG VITE_PROJECT_ID
 ARG VITE_TREASURY_ADDRESS
 ARG VITE_API_URL
+ARG VITE_APP_URL
 
 # Set them as environment variables so the build process can use them.
 ENV VITE_PROJECT_ID=${VITE_PROJECT_ID}
 ENV VITE_TREASURY_ADDRESS=${VITE_TREASURY_ADDRESS}
 ENV VITE_API_URL=${VITE_API_URL}
+ENV VITE_APP_URL=${VITE_APP_URL}
 
 # Copy the rest of the frontend source code and run the build.
 COPY ../frontend/ .

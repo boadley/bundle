@@ -24,6 +24,7 @@ services:
         - VITE_PROJECT_ID=${VITE_PROJECT_ID}
         - VITE_TREASURY_ADDRESS=${VITE_TREASURY_ADDRESS}
         - VITE_API_URL=/api
+        - VITE_APP_URL=${VITE_APP_URL}
     restart: unless-stopped
     ports:
       - "8085:80"
