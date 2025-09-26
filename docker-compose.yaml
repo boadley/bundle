@@ -26,7 +26,7 @@ services:
         - VITE_API_URL=/api
     restart: unless-stopped
     ports:
-      - "8080:80"
+      - "8085:80"
     depends_on:
       - backend
     networks:
