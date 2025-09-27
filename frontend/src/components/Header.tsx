@@ -1,14 +1,41 @@
 
+import { useState } from 'react';
 import { useAppKitAccount } from '@reown/appkit/react';
 import { IoPersonCircleOutline, IoHelpCircleOutline, IoNotificationsOutline } from 'react-icons/io5';
 import ConnectWalletButton from './ConnectWalletButton';
 
 export default function Header() {
   const { isConnected, address } = useAppKitAccount();
+  const [copied, setCopied] = useState(false);
+  const [copiedTimeout, setCopiedTimeout] = useState<NodeJS.Timeout | null>(null);
 
   // Format address for display
   const formatAddress = (addr: string) => {
     return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+  };
+
+  // Handle copying address to clipboard
+  const handleCopyAddress = async () => {
+    if (!address) return;
+
+    try {
+      await navigator.clipboard.writeText(address);
+      setCopied(true);
+
+      // Clear any existing timeout
+      if (copiedTimeout) {
+        clearTimeout(copiedTimeout);
+      }
+
+      // Set new timeout to hide copied message
+      const timeout = setTimeout(() => {
+        setCopied(false);
+      }, 2000);
+
+      setCopiedTimeout(timeout);
+    } catch (error) {
+      console.error('Failed to copy address:', error);
+    }
   };
 
   return (
@@ -20,7 +47,16 @@ export default function Header() {
             <IoPersonCircleOutline className="w-8 h-8 text-white" />
             <div>
               <p className="text-sm text-secondary">Hi,</p>
-              <p className="text-white font-medium">{formatAddress(address)}</p>
+              <p
+                className="text-white font-medium cursor-pointer hover:text-accent transition-colors"
+                onClick={handleCopyAddress}
+                title="Click to copy full address"
+              >
+                {formatAddress(address)}
+              </p>
+              {copied && (
+                <p className="text-xs text-green-400 mt-1">Copied!</p>
+              )}
             </div>
           </div>
 
