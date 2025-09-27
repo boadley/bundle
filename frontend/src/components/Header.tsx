@@ -7,7 +7,7 @@ import ConnectWalletButton from './ConnectWalletButton';
 export default function Header() {
   const { isConnected, address } = useAppKitAccount();
   const [copied, setCopied] = useState(false);
-  const [copiedTimeout, setCopiedTimeout] = useState<NodeJS.Timeout | null>(null);
+  const [copiedTimeout, setCopiedTimeout] = useState<number | null>(null);
 
   // Format address for display
   const formatAddress = (addr: string) => {
@@ -32,7 +32,7 @@ export default function Header() {
         setCopied(false);
       }, 2000);
 
-      setCopiedTimeout(timeout);
+      setCopiedTimeout(timeout as unknown as number);
     } catch (error) {
       console.error('Failed to copy address:', error);
     }
