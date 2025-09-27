@@ -1,6 +1,6 @@
 # Bundle: The OpenRouter for Fiat
 
-![Bundle Logo](URL_TO_YOUR_LOGO_IMAGE)
+![Bundle Logo](https://github.com/boadley/bundle/blob/main/media/bundle_logo_128_128.png)
 
 **The financial super-app that connects the global crypto economy to everyday Nigerian commerce.**
 
@@ -16,7 +16,7 @@
 
 ## 🎬 The Demo Video (The Best Place to Start)
 
-[![Bundle Demo Video Screenshot](URL_TO_A_VIDEO_THUMBNAIL_IMAGE)](https://youtube.com/shorts/KMTt3MfA0Qs?feature=share)
+[![Bundle Demo Video Screenshot](https://github.com/boadley/bundle/blob/main/media/bundle_video_thumbnail.jpg)](https://youtube.com/shorts/KMTt3MfA0Qs?feature=share)
 **(Click the image to watch the 3-minute video)**
 
 ---
