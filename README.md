@@ -1,172 +1,69 @@
-# Bundle
+# Bundle: The OpenRouter for Fiat
 
-## Overview
-Bundle is a hybrid payment system that integrates Hedera blockchain with traditional payment methods, allowing users to spend cryptocurrency on everyday services in Nigeria. The application follows a modern full-stack architecture with a React frontend and Node.js backend.
+![Bundle Logo](URL_TO_YOUR_LOGO_IMAGE)
 
-## Tech Stack
+**The financial super-app that connects the global crypto economy to everyday Nigerian commerce.**
 
-### Frontend
-- **Framework**: React 19.1.1 with TypeScript
-- **Build Tool**: Vite 5.3.1
-- **Styling**: Tailwind CSS 3.4.4
-- **Blockchain Integration**: 
-  - Reown AppKit 1.7.3 (wallet connection)
-  - Wagmi 2.17.2 (Ethereum interactions)
-  - Viem 2.37.7 (low-level Ethereum utilities)
-  - Ethers.js 6.15.0
-- **State Management**: TanStack React Query 5.90.1
-- **UI Components**: React Hot Toast for notifications
-- **HTTP Client**: Axios 1.12.2
+---
 
-### Backend
-- **Runtime**: Node.js with Express 5.1.0
-- **Blockchain**: Hashgraph SDK 2.73.1 (Hedera integration)
-- **Payment Processing**: Paystack integration
-- **Utilities**: CORS, dotenv, UUID generation
-- **Development**: Nodemon for hot reloading
+| **Quick Links** | |
+|---|---|
+| 🚀 **Live App Demo** | [bundle.splashycm.xyz](https://bundle.splashycm.xyz) |
+| 🎬 **Watch the 3-Min Video Pitch** | [YouTube Demo Link](https://youtube.com/shorts/KMTt3MfA0Qs?feature=share |
+| 📊 **View the Pitch Deck** | [Pitch Deck Link](https://the-disconnect-555klw8.gamma.site/) |
 
-## Architecture
+---
 
-### Frontend Structure
-```
-frontend/src/
-├── components/          # Reusable UI components
-│   ├── AirtimeForm.tsx
-│   ├── BankTransferForm.tsx
-│   ├── Button.tsx
-│   ├── ConnectWalletButton.tsx
-│   └── Header.tsx
-├── pages/              # Main application pages
-│   ├── HomePage.tsx
-│   └── LoginPage.tsx
-├── services/           # API communication
-│   └── apiService.ts
-├── hooks/              # Custom React hooks
-│   └── useBundle.ts
-├── utils/              # Utility functions
-├── config.ts           # Environment configuration
-└── main.tsx           # Application entry point
-```
+## 🎬 The Demo Video (The Best Place to Start)
 
-### Backend Structure
-```
-backend/src/
-├── routes/             # API route definitions
-│   └── apiRoutes.js
-├── services/           # Business logic
-│   ├── hederaService.js
-│   └── paymentProviderService.js
-└── app.js             # Express server setup
-```
+[![Bundle Demo Video Screenshot](URL_TO_A_VIDEO_THUMBNAIL_IMAGE)](https://youtube.com/shorts/KMTt3MfA0Qs?feature=share)
+**(Click the image to watch the 3-minute video)**
 
-## Key Features
+---
 
-### Blockchain Integration
-- **Hedera Testnet Support**: Custom network configuration (Chain ID: 296)
-- **EVM Compatibility**: Uses Wagmi for Ethereum-style transactions on Hedera
-- **Wallet Connection**: Reown AppKit for multi-wallet support
-- **Transaction Verification**: Backend validates blockchain transactions before processing payments
+## 🎯 The Vision
 
-### Payment Types
-1. **Airtime Purchase**: Buy mobile airtime using crypto
-2. **Bank Transfers**: Send money to Nigerian bank accounts
-3. **Bill Payments**: Electricity and TV subscriptions (planned)
+For the growing class of Nigerian crypto-earners, Bundle is the financial super-app that acts as a universal router, allowing them to instantly spend their digital assets on any real-world service, from airtime to bank transfers, without ever touching a traditional off-ramp.
 
-### Security & Validation
-- **Transaction Verification**: Backend verifies blockchain transactions before processing
-- **Environment Validation**: Required environment variables are checked at startup
-- **CORS Configuration**: Proper cross-origin setup for development and production
+## 🔥 The Problem We Solve
 
-### Environment Configuration
-The project supports flexible environment management:
-- **Shared Environment**: Single `.env` file at root
-- **Separate Environments**: Individual `.env` files for frontend/backend
-- **Automatic Setup**: `setup-env.sh` script handles environment file creation
+Nigeria has one of the world's most vibrant crypto economies. Yet, using this digital value for daily life is slow, expensive, and complex. The bridge between Web3 earnings and real-world expenses is broken. Bundle fixes this.
 
-### Required Environment Variables
-```bash
-# Shared
-TREASURY_ADDRESS=your_hedera_treasury_address
+## ✨ How It Works: The "OpenRouter" Magic
 
-# Frontend (VITE_ prefix required)
-VITE_PROJECT_ID=your_appkit_project_id
-VITE_TREASURY_ADDRESS=your_treasury_address
-VITE_API_URL=http://localhost:3000/api # For local development
+Bundle is a non-custodial web app built on Hedera. Our backend acts as an intelligent routing engine:
+1.  **User Pays in Crypto:** A user initiates a payment for a N10,000 bank transfer using USDC.
+2.  **Hedera Confirms:** We confirm the transaction in 2-3 seconds on the Hedera network.
+3.  **Router Executes in Fiat:** Our backend instantly makes a N10,000 Naira payment to the recipient from our corporate account via the Paystack API.
+4.  **The Result:** The recipient gets Naira instantly. They have no idea crypto was involved. It's fast, secure, and regulator-friendly.
 
-# Backend
-PAYSTACK_SECRET_KEY=your_paystack_secret_key_here
-FRONTEND_URL=http://localhost:5173  # For local development
+---
 
-```
+## 🏆 A Multi-Track Winning Strategy
 
-### Optional Environment Variables:
+Bundle is designed as a super-app ecosystem to address all four hackathon tracks:
+-   **Onchain Finance:** Flawless stablecoin off-ramping for real-world assets.
+-   **DLT for Operations:** Our B2B API (vision) will automate corporate expenses.
+-   **Immersive Experience:** Our roadmap includes NFT loyalty badges and DeFi savings vaults.
+-   **AI & DePIN:** Our core moat is an AI-powered routing engine that ensures the cheapest, most reliable payment path.
 
-Frontend:
-- `VITE_APP_NAME`: Application name (default: "Bundle")
-- `VITE_APP_DESCRIPTION`: Application description
-- `VITE_APP_ICON`: Application icon URL
+---
 
-## Environment Setup
+## 🛠️ Tech Stack & Architecture
 
-You have two options for environment configuration:
+-   **Frontend:** React, Vite, TypeScript, Tailwind CSS
+-   **Wallet Integration:** AppKit React (@reown/appkit-react)
+-   **Backend:** Node.js, Express
+-   **Blockchain:** Hedera Network (Testnet)
+-   **Fiat Payments:** Paystack API (Sandbox)
+-   **Deployment:** Vercel (Frontend), [Your Backend Host]
 
-### Option 1: Single Shared Environment (Recommended for Production)
+## 🚀 Getting Started (For Technical Judges)
 
-1. Copy the root example environment file:
-```bash
-cp .env.example .env
-```
-
-2. Update the root `.env` file with your configuration.
-
-### Option 2: Separate Environments (Recommended for Development)
-
-For independent frontend/backend development, you can maintain separate environment files:
-
-```bash
-# Frontend only
-cd frontend
-cp .env.example .env
-# Edit frontend/.env with your frontend variables
-
-# Backend only
-cd backend
-cp .env.example .env
-# Edit backend/.env with your backend variables
-```
-
-The setup script will automatically:
-1. Use local `.env` if it exists
-2. Fall back to root `.env` if no local file exists
-3. Create from `.env.example` if neither exists
-
-
-
-
-## Development
-
-1. Install dependencies:
-```bash
-npm install
-cd frontend && npm install
-cd backend && npm install
-```
-
-2. Start development servers:
-```bash
-npm run dev
-```
-
-This will automatically:
-- Set up environment file symlinks
-- Start both frontend and backend servers concurrently
-
-## Critical Developer Notes
-
-1. **Blockchain Network**: Uses Hedera Testnet (Chain ID 296) with custom RPC configuration
-2. **Payment Flow**: Crypto transaction → Backend verification → Traditional payment execution
-3. **CORS Setup**: Pre-configured for Gitpod development environments
-4. **Environment Setup**: Run `npm run setup` to automatically configure environment files
-5. **Treasury Address**: Central treasury receives all crypto payments before processing traditional payments
-
-The codebase follows modern React and Node.js best practices with a focus on blockchain integration and payment processing reliability.
+To run this project locally, please follow these steps:
+1.  Clone the repository: `git clone [your-repo-url]`
+2.  Install backend dependencies: `cd backend && npm install`
+3.  Install frontend dependencies: `cd frontend && npm install`
+4.  Create and configure your `.env` files in both directories using the `.env.example` as a guide.
+5.  Run the backend: `cd backend && npm start`
+6.  Run the frontend: `cd frontend && npm run dev`
