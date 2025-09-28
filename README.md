@@ -9,7 +9,7 @@
 | **Quick Links** | |
 |---|---|
 | 🚀 **Live App Demo** | [bundle.splashycm.xyz](https://bundle.splashycm.xyz) (_Optimized for mobile_) |
-| 🎬 **Watch the 3-Min Video Pitch** | YouTube Demo Link (https://youtube.com/shorts/KMTt3MfA0Qs?feature=share) |
+| 🎬 **Watch the 3-Min Video Pitch** | [Watch on YouTube](https://youtube.com/shorts/KMTt3MfA0Qs?feature=share) |
 | 📊 **View the Pitch Deck** | [Pitch Deck Link](https://the-disconnect-555klw8.gamma.site/) |
 
 ---
@@ -63,7 +63,7 @@ Bundle is designed as a super-app ecosystem to address all four hackathon tracks
 -   **Frontend:** React, Vite, TypeScript, Tailwind CSS
 -   **Wallet Integration:** AppKit React (@reown/appkit-react)
 -   **Backend:** Node.js, Express
--   **Blockchain:** Hedera Network (EVM Testnet eip155:296)
+-   **Blockchain:** Hedera Network (Testnet)
 -   **Fiat Payments:** Paystack API (Sandbox)
 -   **Deployment:** AWS EC2 (Frontend & Backend)
 
