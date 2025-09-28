@@ -9,7 +9,7 @@
 | **Quick Links** | |
 |---|---|
 | 🚀 **Live App Demo** | [bundle.splashycm.xyz](https://bundle.splashycm.xyz) (_Optimized for mobile_) |
-| 🎬 **Watch the 3-Min Video Pitch** | [YouTube Demo Link](https://youtube.com/shorts/KMTt3MfA0Qs?feature=share |
+| 🎬 **Watch the 3-Min Video Pitch** | YouTube Demo Link(https://youtube.com/shorts/KMTt3MfA0Qs?feature=share |
 | 📊 **View the Pitch Deck** | [Pitch Deck Link](https://the-disconnect-555klw8.gamma.site/) |
 
 ---
@@ -17,6 +17,7 @@
 ## 🎬 The Demo Video (The Best Place to Start)
 
 [![Bundle Demo Video Screenshot](https://github.com/boadley/bundle/blob/main/media/bundle_video_thumbnail.jpg)](https://youtube.com/shorts/KMTt3MfA0Qs?feature=share)
+<br>
 **(Click the image to watch the 3-minute video)**
 
 ---
@@ -64,7 +65,7 @@ Bundle is designed as a super-app ecosystem to address all four hackathon tracks
 -   **Backend:** Node.js, Express
 -   **Blockchain:** Hedera Network (EVM Testnet eip155:296)
 -   **Fiat Payments:** Paystack API (Sandbox)
--   **Deployment:** Vercel (Frontend), [Your Backend Host]
+-   **Deployment:** AWS EC2 (Frontend & Backend)
 
 ## 🚀 Getting Started
 
