@@ -8,7 +8,7 @@
 
 | **Quick Links** | |
 |---|---|
-| 🚀 **Live App Demo** | [bundle.splashycm.xyz](https://bundle.splashycm.xyz) |
+| 🚀 **Live App Demo** | [bundle.splashycm.xyz](https://bundle.splashycm.xyz) (_Optimized for mobile_) |
 | 🎬 **Watch the 3-Min Video Pitch** | [YouTube Demo Link](https://youtube.com/shorts/KMTt3MfA0Qs?feature=share |
 | 📊 **View the Pitch Deck** | [Pitch Deck Link](https://the-disconnect-555klw8.gamma.site/) |
 
@@ -39,6 +39,14 @@ Bundle is a non-custodial web app built on Hedera. Our backend acts as an intell
 
 ---
 
+### A Note on This MVP
+
+This MVP is a fully functional demonstration of the core 'OpenRouter for Fiat' technology. The user interface has been optimized for a mobile-first experience, which is the primary target for our consumer app.
+
+**For the best experience, please view the live app on a mobile device or by using your browser's responsive mobile viewer.**
+
+---
+
 ## 🏆 A Multi-Track Winning Strategy
 
 Bundle is designed as a super-app ecosystem to address all four hackathon tracks:
@@ -54,14 +62,14 @@ Bundle is designed as a super-app ecosystem to address all four hackathon tracks
 -   **Frontend:** React, Vite, TypeScript, Tailwind CSS
 -   **Wallet Integration:** AppKit React (@reown/appkit-react)
 -   **Backend:** Node.js, Express
--   **Blockchain:** Hedera Network (Testnet)
+-   **Blockchain:** Hedera Network (EVM Testnet eip155:296)
 -   **Fiat Payments:** Paystack API (Sandbox)
 -   **Deployment:** Vercel (Frontend), [Your Backend Host]
 
-## 🚀 Getting Started (For Technical Judges)
+## 🚀 Getting Started
 
 To run this project locally, please follow these steps:
-1.  Clone the repository: `git clone [your-repo-url]`
+1.  Clone the repository: `git clone https://github.com/boadley/bundle.git`
 2.  Install backend dependencies: `cd backend && npm install`
 3.  Install frontend dependencies: `cd frontend && npm install`
 4.  Create and configure your `.env` files in both directories using the `.env.example` as a guide.
