@@ -16,7 +16,7 @@
 
 ## 🎬 The Demo Video (The Best Place to Start)
 
-[![Bundle Demo Video Screenshot](https://github.com/boadley/bundle/blob/main/media/bundle_video_thumbnail.jpg)](https://youtube.com/shorts/KMTt3MfA0Qs?feature=share)
+<a href="https://youtube.com/shorts/KMTt3MfA0Qs?feature=share"><img src="https://github.com/boadley/bundle/blob/main/media/bundle_video_thumbnail.jpg" alt="Bundle Demo Video Screenshot" width="300"></a>
 <br>
 **(Click the image to watch the 3-minute video)**
 
