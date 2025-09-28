@@ -9,7 +9,7 @@
 | **Quick Links** | |
 |---|---|
 | 🚀 **Live App Demo** | [bundle.splashycm.xyz](https://bundle.splashycm.xyz) (_Optimized for mobile_) |
-| 🎬 **Watch the 3-Min Video Pitch** | YouTube Demo Link(https://youtube.com/shorts/KMTt3MfA0Qs?feature=share |
+| 🎬 **Watch the 3-Min Video Pitch** | YouTube Demo Link (https://youtube.com/shorts/KMTt3MfA0Qs?feature=share) |
 | 📊 **View the Pitch Deck** | [Pitch Deck Link](https://the-disconnect-555klw8.gamma.site/) |
 
 ---
