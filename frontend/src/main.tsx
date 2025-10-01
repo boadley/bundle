@@ -57,6 +57,8 @@ createAppKit({
   projectId: config.projectId,
   metadata,
   features: {
+    email: false,
+    socials: [],
     analytics: true
   }
 });
