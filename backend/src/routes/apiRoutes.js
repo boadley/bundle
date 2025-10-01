@@ -1,4 +1,5 @@
 // backend/src/routes/apiRoutes.js
+console.log("--- 2. Loading apiRoutes.js ---");
 
 const express = require("express");
 const router = express.Router();

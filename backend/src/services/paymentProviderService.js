@@ -1,4 +1,5 @@
 // backend/src/services/paymentProviderService.js
+console.log('--- 4. Loading paymentProviderService.js ---');
 
 const axios = require("axios");
 

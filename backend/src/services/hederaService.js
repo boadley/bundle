@@ -1,3 +1,4 @@
+console.log('--- 3. Loading hederaService.js ---');
 require("dotenv").config();
 
 // Hedera Mirror Node API endpoint for Testnet
