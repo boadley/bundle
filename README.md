@@ -11,7 +11,7 @@
 | 🚀 **Live App Demo** | [bundle.splashycm.xyz](https://bundle.splashycm.xyz) (_Optimized for mobile_) |
 | 🎬 **Watch the 3-Min Video Pitch** | [Watch on YouTube](https://youtube.com/shorts/KMTt3MfA0Qs?feature=share) |
 | 📊 **View the Pitch Deck** | [Pitch Deck Link](https://the-disconnect-555klw8.gamma.site/) |
-| 📊 **View the Certification Link** | [Certification Link](https://certs.hashgraphdev.com/27f7905d-610f-4b49-b4e1-d702a18946b7.pdf) |
+| 📊 **View the Certification Link** | [Hedera Developer Certification Link](https://certs.hashgraphdev.com/27f7905d-610f-4b49-b4e1-d702a18946b7.pdf) |
 
 
 ---
